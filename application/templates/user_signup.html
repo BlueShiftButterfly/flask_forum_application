@@ -1,13 +1,15 @@
 {% block header %}
-  <h1>{% block title %}Log In{% endblock %}</h1>
+  <h1>{% block title %}Sign up{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
     <form method="POST">
+        <label for="email_input">Email</label>
+        <input type="text" name="email" id="email_input"></input>
         <label for="username_input">Username</label>
         <input type="text" name="username" id="username_input"></input>
         <label for="password_input">Password</label>
         <input type="password" name="password" id="password_input"></input>
-        <input type="submit" value="Log in"></input>
+        <input type="submit" value="Sign up"></input>
     </form>
 {% endblock %}
