@@ -6,7 +6,7 @@ from application.input_validation import PasswordValidationResult, PasswordValid
 from application.cryptography import hash_password, check_password 
 from application.db import DatabaseBridge
 
-blueprint = Blueprint("authentication", __name__, url_prefix="/auth")
+blueprint = Blueprint("account", __name__, url_prefix="/account")
 db = DatabaseBridge()
 un_validator = UsernameValidator(3, 32, set(string.ascii_letters+string.digits))
 pw_validator = PasswordValidator(5, 64, set(string.ascii_letters+string.digits+string.punctuation))
@@ -16,8 +16,11 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        return redirect(url_for("index"))
-
+        user = db.get_user(username)
+        if user is not None:
+            if check_password(password, user.credentials_data.password_hash):
+                print(f"User {user.credentials_data.username} authenticated")
+                return redirect(url_for("index"))
     return render_template("user_login.html")
 
 @blueprint.route("/signup", methods=("GET", "POST"))
