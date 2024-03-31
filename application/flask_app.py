@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints import account
 
@@ -28,7 +28,7 @@ def create_app(test_config=None):
     app.register_blueprint(account.blueprint)
 
     @app.route("/")
-    def index():
+    def index(session=session):
         return render_template("index.html")
 
     return app

@@ -1,6 +1,6 @@
 import string
 import uuid
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 from application.user_credentials import User, UserCredentialsData
 from application.input_validation import PasswordValidationResult, PasswordValidator, UsernameValidationResult, UsernameValidator
 from application.cryptography import hash_password, check_password 
@@ -20,6 +20,7 @@ def login():
         if user is not None:
             if check_password(password, user.credentials_data.password_hash):
                 print(f"User {user.credentials_data.username} authenticated")
+                session["username"] = user.credentials_data.username
                 return redirect(url_for("index"))
     return render_template("user_login.html")
 
@@ -40,6 +41,12 @@ def signup():
             new_user = User(uuid.uuid4(), new_user_credentials)
             db.add_user(new_user)
             print("Added user: ", new_user.uuid, new_user.credentials_data.username)
+            session["username"] = new_user.credentials_data.username
             return redirect(url_for("index"))     
 
     return render_template("user_signup.html")
+
+@blueprint.route("/logout", methods=("GET", "POST"))
+def logout():
+    del session["username"]
+    return redirect(url_for("index"))

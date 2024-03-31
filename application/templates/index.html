@@ -2,6 +2,11 @@
   <h1>{% block title %}Main Page{% endblock %}</h1>
 {% endblock %}
 
+{% if session.username %}
+<p>Logged in as {{session.username}}</p>
+
+{% endif %}
+
 {% block content %}
     <p>some content</p>
 {% endblock %}

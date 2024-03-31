@@ -1,6 +1,16 @@
 # flask_forum_application
 
-Valittu aihe:
+## Välipalautus 1 tilanne
+
+Sovelluksen voi käynnistää linuxilla käyttämällä komentoa
+
+`bash launch_debug.sh`
+
+tai yleisesti poetry:n kautta:
+
+`poetry run flask --app application/main.py run --debug`
+
+## Valittu aihe:
 
 Keskustelusovellus (Sama mikä esimerkissä)
 
