@@ -10,6 +10,16 @@ tai yleisesti poetry:n kautta:
 
 `poetry run flask --app application/main.py run --debug`
 
+Sovelluksessa käyttäjä voi:
+
+* Luoda tunnukset sivulta /account/signup
+* Kirjautua sisään sivulta /account/login
+* Kirjautua ulos sivulta /account/logout
+
+Sovelluksen index sivu näyttää kirjautuneen käyttäjän nimen.
+
+Sovellus ei vielä talleta tietoja tietokantaan.
+
 ## Valittu aihe:
 
 Keskustelusovellus (Sama mikä esimerkissä)
