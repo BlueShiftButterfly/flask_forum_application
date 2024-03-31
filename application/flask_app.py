@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template
 from dotenv import load_dotenv, find_dotenv
-from application.blueprints import authentication
+from application.blueprints import account
 
 def create_app(test_config=None):
     load_dotenv(find_dotenv())
@@ -25,7 +25,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    app.register_blueprint(authentication.blueprint)
+    app.register_blueprint(account.blueprint)
 
     @app.route("/")
     def index():

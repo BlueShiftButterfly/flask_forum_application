@@ -31,6 +31,7 @@ def signup():
         
         un_result = un_validator.validate(username, db.taken_usernames)
         pw_result = pw_validator.validate(password)
+        print(un_result, pw_result)
         if(
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
