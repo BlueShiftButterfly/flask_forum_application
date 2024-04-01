@@ -1,12 +1,6 @@
-{% block header %}
-  <h1>{% block title %}Main Page{% endblock %}</h1>
-{% endblock %}
-
-{% if session.username %}
-<p>Logged in as {{session.username}}</p>
-
-{% endif %}
+{% extends "base_layout.html" %}
+{% block title %}Frontpage{% endblock %}
 
 {% block content %}
-    <p>some content</p>
+  <p>some content</p>
 {% endblock %}

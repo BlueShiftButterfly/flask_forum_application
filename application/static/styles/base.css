@@ -1,0 +1,30 @@
+.page_container .navigation ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    float:right;
+}
+
+.page_container .navigation li {
+    display: inline;
+    padding-left: 8px;
+    padding-right: 8px;
+    text-align: center;
+}
+
+.page_container .navigation {
+    height: 32px;
+}
+
+.page_container {
+    display: grid;
+    margin-right: 32px;
+    margin-left: 32px;
+    margin-top: 32px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
