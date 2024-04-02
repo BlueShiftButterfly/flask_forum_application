@@ -1,8 +1,7 @@
 import string
 import uuid
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from application.user_credentials import User, UserCredentialsData
-from application.input_validation import PasswordValidationResult, PasswordValidator, UsernameValidationResult, UsernameValidator
+from application.user import User, UserCredentialsData, PasswordValidationResult, PasswordValidator, UsernameValidationResult, UsernameValidator
 from application.cryptography import hash_password, check_password 
 from application.db import DatabaseBridge
 
