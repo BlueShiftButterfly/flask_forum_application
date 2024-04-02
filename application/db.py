@@ -1,4 +1,4 @@
-from application.user_credentials import User
+from application.user import User
 
 class DatabaseBridge:
     def __init__(self) -> None:
