@@ -24,11 +24,11 @@ class UsernameValidator:
         self.valid_characters = valid_characters
 
     def validate(self, username: str, other_usernames: set[str]) -> UsernameValidationResult:
-        if (username in other_usernames):
+        if username in other_usernames:
             return UsernameValidationResult.NOT_UNIQUE
-        if (not is_length_valid(username, self.min_length, self.max_length)):
+        if not is_length_valid(username, self.min_length, self.max_length):
             return UsernameValidationResult.INVALID_LENGTH
-        if (not are_characters_valid(username, self.valid_characters)):
+        if not are_characters_valid(username, self.valid_characters):
             return UsernameValidationResult.INVALID_CHARACTERS
         return UsernameValidationResult.VALID
 
@@ -44,9 +44,9 @@ class PasswordValidator:
         self.valid_characters = valid_characters
 
     def validate(self, password: str) -> PasswordValidationResult:
-        if (not is_length_valid(password, self.min_length, self.max_length)):
+        if not is_length_valid(password, self.min_length, self.max_length):
             return PasswordValidationResult.INVALID_LENGTH
-        if (not are_characters_valid(password, self.valid_characters)):
+        if not are_characters_valid(password, self.valid_characters):
             return PasswordValidationResult.INVALID_CHARACTERS
         return PasswordValidationResult.VALID
 

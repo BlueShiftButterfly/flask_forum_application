@@ -10,7 +10,7 @@ class DatabaseBridge:
         self.__taken_usernames.add(user.credentials_data.username)
 
     def get_user(self, username: str):
-        if username not in self.__users.keys():
+        if username not in self.__users:
             return None
         return self.__users[username]
 

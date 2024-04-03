@@ -34,12 +34,16 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    auth = Authenticator(DatabaseBridge(), UsernameValidator(3,30, UN_CHARACTERS), PasswordValidator(7, 50, PW_CHARACTERS))
+    auth = Authenticator(
+        DatabaseBridge(),
+        UsernameValidator(3,30, UN_CHARACTERS),
+        PasswordValidator(7, 50, PW_CHARACTERS)
+    )
 
     app.register_blueprint(AccountBlueprint(auth).blueprint)
 
     @app.route("/")
-    def index(session=session):
+    def index(user_session=session):
         return render_template("index.html")
 
     print("APP BUILT")
