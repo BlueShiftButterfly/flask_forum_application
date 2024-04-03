@@ -1,6 +1,7 @@
 import os
 import string
 from flask import Flask, render_template, session
+from flask_talisman import Talisman
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
 from application.authentication import Authenticator
@@ -15,6 +16,7 @@ def create_app(test_config=None):
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    Talisman(app)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY"),
     )
