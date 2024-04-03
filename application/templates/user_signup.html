@@ -1,8 +1,7 @@
-{% block header %}
-  <h1>{% block title %}Sign up{% endblock %}</h1>
-{% endblock %}
+{% extends "base_layout.html" %}
+{% block title %}Sign up{% endblock %}
 
-{% block content %}
+{% block page_container %}
     <form method="POST">
         <label for="username_input">Username</label>
         <input type="text" name="username" id="username_input"></input>
