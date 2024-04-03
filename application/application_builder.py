@@ -1,7 +1,14 @@
 import os
+import string
 from flask import Flask, render_template, session
 from dotenv import load_dotenv, find_dotenv
-from application.blueprints import account
+from application.blueprints.account import AccountBlueprint
+from application.authentication import Authenticator
+from application.db import DatabaseBridge
+from application.user import UsernameValidator, PasswordValidator
+
+UN_CHARACTERS = set(string.ascii_letters + string.digits)
+PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
 
 def create_app(test_config=None):
     load_dotenv(find_dotenv())
@@ -25,10 +32,13 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    app.register_blueprint(account.blueprint)
+    auth = Authenticator(DatabaseBridge(), UsernameValidator(3,30, UN_CHARACTERS), PasswordValidator(7, 50, PW_CHARACTERS))
+
+    app.register_blueprint(AccountBlueprint(auth).blueprint)
 
     @app.route("/")
     def index(session=session):
         return render_template("index.html")
 
+    print("APP BUILT")
     return app
