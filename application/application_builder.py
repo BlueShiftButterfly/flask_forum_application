@@ -18,8 +18,9 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     Talisman(app)
     app.config.from_mapping(
-        SECRET_KEY=os.environ.get("SECRET_KEY"),
+        SECRET_KEY=os.environ.get("SECRET_KEY")
     )
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -34,8 +35,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    db = DatabaseBridge(app)
     auth = Authenticator(
-        DatabaseBridge(),
+        db,
         UsernameValidator(3,30, UN_CHARACTERS),
         PasswordValidator(7, 50, PW_CHARACTERS)
     )
@@ -43,8 +45,9 @@ def create_app(test_config=None):
     app.register_blueprint(AccountBlueprint(auth).blueprint)
 
     @app.route("/")
-    def index(user_session=session):
+    def index(session=session):
         return render_template("index.html")
 
     print("APP BUILT")
+    db.db_debug_info()
     return app
