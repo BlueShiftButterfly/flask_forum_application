@@ -13,7 +13,7 @@ class LoginView(View):
             username = request.form.get("username")
             password = request.form.get("password")
             if self.authenticator.login(username, password):
-                return redirect(url_for("index"))
+                return redirect(url_for("index.index_view"))
         return render_template(self.template)
 
 class SignupView(View):
@@ -27,9 +27,9 @@ class SignupView(View):
             username = request.form.get("username")
             password = request.form.get("password")
             if self.authenticator.signup(username, password):
-                return redirect(url_for("index"))
+                return redirect(url_for("index.index_view"))
         return render_template(self.template)
 
 def logout():
     del session["username"]
-    return redirect(url_for("index"))
+    return redirect(url_for("index.index_view"))

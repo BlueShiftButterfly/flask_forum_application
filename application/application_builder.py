@@ -4,6 +4,7 @@ from flask import Flask, render_template, session
 from flask_talisman import Talisman
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
+from application.blueprints.index import IndexBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.user import UsernameValidator, PasswordValidator
@@ -42,12 +43,8 @@ def create_app(test_config=None):
         PasswordValidator(7, 50, PW_CHARACTERS)
     )
 
+    app.register_blueprint(IndexBlueprint().blueprint)
     app.register_blueprint(AccountBlueprint(auth).blueprint)
 
-    @app.route("/")
-    def index(session=session):
-        return render_template("index.html")
-
     print("APP BUILT")
-    db.db_debug_info()
     return app

@@ -1,32 +1,4 @@
 {% extends "base_layout.html" %}
 {% block page_container %}
-    <div class="navigation">
-        {% block navigation %}
-        <ul>
-            <li>
-                {% if session.username %}
-                Logged in as {{session.username}}
-                {% else %}
-                Not logged in
-                {% endif %}
-            </li>
-            <li>
-                {% if session.username %}
-                <a href="/account/logout">Log Out</a>
-                {% else %}
-                <a href="/account/login">Log In</a>
-                <a href="/account/signup">Sign Up</a>
-                {% endif %}
-            </li>
-        </ul>
-        {% endblock %}
-    </div>
-    <div class="content">
-        {% block content %}{% endblock %}
-    </div>
-    <div class="footer">
-        {% block footer %}
-        <p>Footer content</p>
-        {% endblock %}
-    </div>
+    
 {% endblock %}
