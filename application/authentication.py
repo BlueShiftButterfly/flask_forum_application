@@ -10,6 +10,7 @@ from application.user import (
 )
 from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
+from application.timestamp import get_utc_timestamp, get_date_from_timestamp
 
 class Authenticator:
     def __init__(
@@ -39,8 +40,9 @@ class Authenticator:
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
         ):
+            timestamp = get_utc_timestamp()
             new_user_credentials = UserCredentialsData(username, hash_password(password))
-            new_user = User(uuid.uuid4(), new_user_credentials)
+            new_user = User(uuid.uuid4(), new_user_credentials, timestamp)
             self.db_bridge.add_user(new_user)
             print("Added user: ", new_user.uuid, new_user.credentials_data.username)
             session["username"] = new_user.credentials_data.username

@@ -64,9 +64,10 @@ class UserCredentialsData:
         return self.__password_hash
 
 class User:
-    def __init__(self, uuid, credentials_data: UserCredentialsData) -> None:
+    def __init__(self, uuid, credentials_data: UserCredentialsData, creation_timestamp: int) -> None:
         self.__uuid = uuid
         self.__credentials_data = credentials_data
+        self.__creation_timestamp = creation_timestamp
 
     @property
     def uuid(self):
@@ -75,3 +76,7 @@ class User:
     @property
     def credentials_data(self):
         return self.__credentials_data
+
+    @property
+    def creation_timestamp(self):
+        return self.__creation_timestamp

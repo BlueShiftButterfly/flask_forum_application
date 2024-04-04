@@ -36,7 +36,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    db = DatabaseBridge(app)
+    db = DatabaseBridge(app, debug=True)
     auth = Authenticator(
         db,
         UsernameValidator(3,30, UN_CHARACTERS),
