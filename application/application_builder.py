@@ -6,9 +6,10 @@ from flask_login import LoginManager
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
 from application.blueprints.index import IndexBlueprint
+from application.blueprints.forum import ForumBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
-from application.user import UsernameValidator, PasswordValidator
+from application.authentication import UsernameValidator, PasswordValidator
 
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
@@ -46,6 +47,7 @@ def create_app(test_config=None):
     )
     app.register_blueprint(IndexBlueprint().blueprint)
     app.register_blueprint(AccountBlueprint(auth).blueprint)
+    app.register_blueprint(ForumBlueprint().blueprint)
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"
     return app
