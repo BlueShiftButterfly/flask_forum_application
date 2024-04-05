@@ -1,4 +1,5 @@
 from flask.views import View
+from flask_login import login_required
 from flask import render_template, request, redirect, url_for, session
 from application.authentication import Authenticator
 
@@ -35,6 +36,7 @@ class LogoutView(View):
     def __init__(self, authenticator: Authenticator) -> None:
         self.authenticator = authenticator
 
+    @login_required
     def dispatch_request(self):        
         self.authenticator.logout()
         return redirect(url_for("index.index_view"))

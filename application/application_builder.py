@@ -47,6 +47,5 @@ def create_app(test_config=None):
     app.register_blueprint(IndexBlueprint().blueprint)
     app.register_blueprint(AccountBlueprint(auth).blueprint)
     login_manager.user_loader(db.get_user_by_uuid)
-
-    print("APP BUILT")
+    login_manager.login_view = "account.login_view"
     return app
