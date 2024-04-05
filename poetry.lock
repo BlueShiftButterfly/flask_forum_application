@@ -442,6 +442,17 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "shortuuid"
+version = "1.0.13"
+description = "A generator library for concise, unambiguous and URL-safe UUIDs."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "shortuuid-1.0.13-py3-none-any.whl", hash = "sha256:a482a497300b49b4953e15108a7913244e1bb0d41f9d332f5e9925dba33a3c5a"},
+    {file = "shortuuid-1.0.13.tar.gz", hash = "sha256:3bb9cf07f606260584b1df46399c0b87dd84773e7b25912b7e391e30797c5e72"},
+]
+
+[[package]]
 name = "sqlalchemy"
 version = "2.0.29"
 description = "Database Abstraction Library"
@@ -581,4 +592,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "86a273e4e8de3850ed5e91e9dd82ad32e5916395e112ce8dcd4b39f8a7ceb3f8"
+content-hash = "6b8a05d0832bce21138b9fd57a6142e0cb6424d87d2e5e54e78353890ff75a4e"

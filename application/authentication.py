@@ -86,7 +86,7 @@ class Authenticator:
             pw_result == PasswordValidationResult.VALID
         ):
             timestamp = get_utc_timestamp()
-            new_user = User(uuid.uuid4(), username, hash_password(password), timestamp, True, True, False)
+            new_user = User(str(uuid.uuid4()), username, hash_password(password), timestamp, True, True, False)
             self.db_bridge.add_user(new_user)
             print("Added user: ", new_user.uuid, new_user.username)
             #session["username"] = new_user.username

@@ -3,4 +3,14 @@
 
 {% block content %}
   <p>this is a forum named {{forum_name}}</p>
+  <p>Threads:</p>
+  <ul>
+    {% for item in threads %}
+        <li>
+          <p>{{ item[0] }}</p>
+          <p>{{ item[1] }}</p>
+          <p>Posted by {{ item[2] }} at {{ item[3] }}</p>
+        </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

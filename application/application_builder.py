@@ -7,10 +7,11 @@ from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
 from application.blueprints.index import IndexBlueprint
 from application.blueprints.forum import ForumBlueprint
+from application.blueprints.thread import ThreadBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
-from application.forum import create_forum
+from application.thread import create_thread
 
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
@@ -46,9 +47,17 @@ def create_app(test_config=None):
         UsernameValidator(3,30, UN_CHARACTERS),
         PasswordValidator(7, 50, PW_CHARACTERS)
     )
-    app.register_blueprint(IndexBlueprint(db).blueprint)
-    app.register_blueprint(AccountBlueprint(auth).blueprint)
-    app.register_blueprint(ForumBlueprint(db).blueprint)
+    ib = IndexBlueprint(db)
+    ab = AccountBlueprint(auth)
+    fb = ForumBlueprint(db)
+    tb = ThreadBlueprint(db)
+
+    fb.blueprint.register_blueprint(tb.blueprint)
+
+    app.register_blueprint(ib.blueprint)
+    app.register_blueprint(ab.blueprint)
+    app.register_blueprint(fb.blueprint)    
+
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"
     return app

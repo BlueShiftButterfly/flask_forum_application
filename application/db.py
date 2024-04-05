@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from application.user import User
 from application.forum import Forum
+from application.thread import Thread
 
 class DatabaseBridge:
     def __init__(self, app, debug: bool = False) -> None:
@@ -87,7 +88,32 @@ class DatabaseBridge:
         if result is None:
             return None
         forum_objects: list[Forum] = []
-        print(result)
         for r in result:
             forum_objects.append(Forum(r[0], r[1], r[2], r[3]))
         return forum_objects
+
+    def add_thread(self, thread: Thread):
+        sql = "INSERT INTO threads (uuid, title, content, poster_uuid, forum_uuid, created) VALUES (:uuid, :title, :content, :poster_uuid, :forum_uuid, :created)"
+        sql_args = {
+            "uuid": thread.uuid,
+            "title": thread.title,
+            "content": thread.content,
+            "poster_uuid": thread.poster_uuid,
+            "forum_uuid": thread.forum_uuid,
+            "created": thread.creation_timestamp
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def get_threads_in_forum(self, forum_uuid: str):
+        sql = "SELECT uuid, title, content, poster_uuid, forum_uuid, created FROM threads WHERE forum_uuid=:forum_uuid"
+        sql_args = {
+            "forum_uuid": forum_uuid
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchall()
+        if result is None:
+            return None
+        thread_objects: list[Thread] = []
+        for r in result:
+            thread_objects.append(Thread(r[0], r[1], r[2], r[3], r[4], r[5]))
+        return thread_objects

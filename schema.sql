@@ -3,7 +3,7 @@ CREATE TABLE users (
     uuid TEXT,
     username TEXT,
     password_hash TEXT,
-    created BIGINT,
+    created INT,
     is_authenticated BOOLEAN,
     is_active BOOLEAN
 );
@@ -13,5 +13,15 @@ CREATE TABLE forums (
     uuid TEXT,
     url_name TEXT,
     display_name TEXT,
-    created BIGINT
+    created INT
+);
+
+CREATE TABLE threads (
+    id SERIAL PRIMARY KEY,
+    uuid TEXT,
+    title TEXT,
+    content TEXT,
+    poster_uuid TEXT,
+    forum_uuid TEXT,
+    created INT
 );
