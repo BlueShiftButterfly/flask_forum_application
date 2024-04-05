@@ -1,10 +1,13 @@
 from flask.views import View
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for
+from application.db import DatabaseBridge
 
 class IndexView(View):
     methods = ["GET", "POST"]
-    def __init__(self, template) -> None:
+    def __init__(self, template, db: DatabaseBridge) -> None:
         self.template = template
+        self.db = db
 
     def dispatch_request(self):
-        return render_template(self.template, session=session)
+        forums = self.db.get_all_forums()
+        return render_template(self.template, forums=forums)

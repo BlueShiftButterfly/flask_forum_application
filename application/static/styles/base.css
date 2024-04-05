@@ -14,6 +14,10 @@
 
 .page_container .navigation {
     width: 100%;
+    background-color: lightgreen;
+    border-bottom: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: darkgreen;
 }
 
 .page_container .content {

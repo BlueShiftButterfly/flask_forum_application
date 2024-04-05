@@ -3,4 +3,11 @@
 
 {% block content %}
   <p>some content</p>
+  <p>List of forums:</p>
+  <ul>
+    {% for item in forums %}
+        <li><a href="{{ item.url }}">{{ item.display_name }}</a></li>
+    {% endfor %}
+  </ul>
+  
 {% endblock %}
