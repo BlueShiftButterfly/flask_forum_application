@@ -1,4 +1,5 @@
 from enum import Enum
+from dataclasses import dataclass
 from application.string_validator import is_length_valid, are_characters_valid
 
 class UsernameValidationResult(Enum):
@@ -50,33 +51,15 @@ class PasswordValidator:
             return PasswordValidationResult.INVALID_CHARACTERS
         return PasswordValidationResult.VALID
 
-class UserCredentialsData:
-    def __init__(self, username, password_hash) -> None:
-        self.__username = username
-        self.__password_hash = password_hash
-
-    @property
-    def username(self):
-        return self.__username
-
-    @property
-    def password_hash(self):
-        return self.__password_hash
-
+@dataclass
 class User:
-    def __init__(self, uuid, credentials_data: UserCredentialsData, creation_timestamp: int) -> None:
-        self.__uuid = uuid
-        self.__credentials_data = credentials_data
-        self.__creation_timestamp = creation_timestamp
+    uuid:str
+    username: str
+    password_hash: str
+    creation_timestamp: int
+    is_authenticated: bool
+    is_active: bool
+    is_anonymous: bool
 
-    @property
-    def uuid(self):
-        return self.__uuid
-
-    @property
-    def credentials_data(self):
-        return self.__credentials_data
-
-    @property
-    def creation_timestamp(self):
-        return self.__creation_timestamp
+    def get_id(self):
+        return self.uuid

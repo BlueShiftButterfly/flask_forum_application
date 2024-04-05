@@ -2,6 +2,7 @@ import os
 import string
 from flask import Flask, render_template, session
 from flask_talisman import Talisman
+from flask_login import LoginManager
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
 from application.blueprints.index import IndexBlueprint
@@ -17,6 +18,7 @@ def create_app(test_config=None):
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    login_manager = LoginManager(app)
     Talisman(app)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY")
@@ -42,9 +44,9 @@ def create_app(test_config=None):
         UsernameValidator(3,30, UN_CHARACTERS),
         PasswordValidator(7, 50, PW_CHARACTERS)
     )
-
     app.register_blueprint(IndexBlueprint().blueprint)
     app.register_blueprint(AccountBlueprint(auth).blueprint)
+    login_manager.user_loader(db.get_user_by_uuid)
 
     print("APP BUILT")
     return app

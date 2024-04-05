@@ -6,4 +6,4 @@ class AccountBlueprint:
         self.blueprint = Blueprint("account", __name__, url_prefix="/account")
         self.blueprint.add_url_rule("/login", view_func=account.LoginView.as_view("login_view", "user_login.html", authenticator))
         self.blueprint.add_url_rule("/signup", view_func=account.SignupView.as_view("signup_view", "user_signup.html", authenticator))
-        self.blueprint.route("/logout", methods=("GET", "POST"))(account.logout)
+        self.blueprint.add_url_rule("/logout", view_func=account.LogoutView.as_view("logout_view", authenticator))

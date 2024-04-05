@@ -30,6 +30,11 @@ class SignupView(View):
                 return redirect(url_for("index.index_view"))
         return render_template(self.template)
 
-def logout():
-    del session["username"]
-    return redirect(url_for("index.index_view"))
+class LogoutView(View):
+    methods = ["GET", "POST"]
+    def __init__(self, authenticator: Authenticator) -> None:
+        self.authenticator = authenticator
+
+    def dispatch_request(self):        
+        self.authenticator.logout()
+        return redirect(url_for("index.index_view"))
