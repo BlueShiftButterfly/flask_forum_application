@@ -7,7 +7,7 @@
   <ul>
     {% for item in threads %}
         <li>
-          <p>{{ item[0] }}</p>
+          <a href="{{ item[4] }}">{{ item[0] }}</a>
           <p>{{ item[1] }}</p>
           <p>Posted by {{ item[2] }} at {{ item[3] }}</p>
         </li>

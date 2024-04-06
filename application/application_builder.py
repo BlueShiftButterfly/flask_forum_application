@@ -52,11 +52,12 @@ def create_app(test_config=None):
     fb = ForumBlueprint(db)
     tb = ThreadBlueprint(db)
 
-    fb.blueprint.register_blueprint(tb.blueprint)
+    #fb.blueprint.register_blueprint(tb.blueprint)
 
     app.register_blueprint(ib.blueprint)
     app.register_blueprint(ab.blueprint)
-    app.register_blueprint(fb.blueprint)    
+    app.register_blueprint(fb.blueprint)
+    app.register_blueprint(tb.blueprint)  
 
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"

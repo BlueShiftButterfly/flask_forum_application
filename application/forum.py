@@ -14,4 +14,4 @@ class Forum:
 
     @property
     def url(self):
-        return "/f/"+self.url_name
+        return "/forum/"+self.url_name

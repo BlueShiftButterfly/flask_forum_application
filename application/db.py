@@ -23,6 +23,14 @@ class DatabaseBridge:
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
 
+    def remove_user(self, uuid: str):
+        sql = "DELETE FROM users WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
     def get_user_by_username(self, username: str):
         sql = "SELECT uuid, username, password_hash, created, is_authenticated, is_active FROM users WHERE username=:username"
         sql_args = {
@@ -32,14 +40,6 @@ class DatabaseBridge:
         if result is None:
             return None
         return User(result[0], result[1], result[2], result[3], result[4], result[5], False)
-        
-
-    def get_usernames(self):
-        sql = "SELECT username FROM users"
-        result = self.__db.session.execute(text(sql)).fetchall()
-        if result is None:
-            return None
-        return set(result)
 
     def get_user_by_uuid(self, uuid: str):
         sql = "SELECT uuid, username, password_hash, created, is_authenticated, is_active FROM users WHERE uuid=:uuid"
@@ -51,6 +51,13 @@ class DatabaseBridge:
             return None
         return User(result[0], result[1], result[2], result[3], result[4], result[5], False)
 
+    def get_usernames(self):
+        sql = "SELECT username FROM users"
+        result = self.__db.session.execute(text(sql)).fetchall()
+        if result is None:
+            return None
+        return set(result)
+
     def add_forum(self, forum: Forum):
         sql = "INSERT INTO forums (uuid, url_name, display_name, created) VALUES (:uuid, :url_name, :display_name, :created)"
         sql_args = {
@@ -58,6 +65,14 @@ class DatabaseBridge:
             "url_name": forum.url_name,
             "display_name": forum.display_name,
             "created": forum.creation_timestamp
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def remove_forum(self, uuid: str):
+        sql = "DELETE FROM forums WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
         }
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
@@ -104,6 +119,25 @@ class DatabaseBridge:
         }
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
+
+    def remove_user(self, uuid: str):
+        sql = "DELETE FROM threads WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def get_thread_by_uuid(self, uuid: str):
+        sql = "SELECT uuid, title, content, poster_uuid, forum_uuid, created FROM threads WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        
+        return Thread(result[0], result[1], result[2], result[3], result[4], result[5])
 
     def get_threads_in_forum(self, forum_uuid: str):
         sql = "SELECT uuid, title, content, poster_uuid, forum_uuid, created FROM threads WHERE forum_uuid=:forum_uuid"

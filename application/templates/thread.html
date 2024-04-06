@@ -1,6 +1,8 @@
 {% extends "base_layout.html" %}
-{% block title %}thread{% endblock %}
+{% block title %}{{thread.title}}{% endblock %}
 
 {% block content %}
-  <p>thread content</p>
+  <p>Forum: {{forum_name}}</p>
+  <p>{{thread.title}}</p>
+  <p>{{thread.content}}</p>
 {% endblock %}
