@@ -58,6 +58,24 @@ class DatabaseBridge:
             return None
         return set(result)
 
+    def set_user_authentication_status(self, uuid: str, is_authenticated: bool):
+        sql = "UPDATE users SET is_authenticated=:is_authenticated WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid,
+            "is_authenticated": is_authenticated
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def set_user_active_status(self, uuid: str, is_active: bool):
+        sql = "UPDATE users SET is_active=:is_active WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid,
+            "is_active": is_active
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
     def add_forum(self, forum: Forum):
         sql = "INSERT INTO forums (uuid, url_name, display_name, created) VALUES (:uuid, :url_name, :display_name, :created)"
         sql_args = {

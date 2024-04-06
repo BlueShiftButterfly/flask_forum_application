@@ -70,10 +70,8 @@ class Authenticator:
     def login(self, username, password):
         user: User = self.db_bridge.get_user_by_username(username)
         if user is not None:
-            if check_password(password, user.password_hash):
+            if flask_login.login_user(user) and check_password(password, user.password_hash):
                 print(f"User {user.username} authenticated")
-                #session["username"] = user.username
-                flask_login.login_user(user)
                 return True
         return False
 
@@ -89,7 +87,6 @@ class Authenticator:
             new_user = User(str(uuid.uuid4()), username, hash_password(password), timestamp, True, True, False)
             self.db_bridge.add_user(new_user)
             print("Added user: ", new_user.uuid, new_user.username)
-            #session["username"] = new_user.username
             flask_login.login_user(new_user)
             return True
         return False
