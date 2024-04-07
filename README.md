@@ -29,6 +29,11 @@ poetry run flask --app application/main.py run --debug
 
 ## Välipalautus 2 tilanne
 
+Sovelluksessa käyttäjä voi luoda tunnukset ja kirjautua sisään/ulos.
+
+Käyttäjä voi lukea eri keskustelualueilla viestejä.
+
+Sovelluksessa ei voi vielä luoda keskustelualueita tai viestejä.
 
 ## Valittu aihe:
 
