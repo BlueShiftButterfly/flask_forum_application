@@ -2,29 +2,39 @@
 
 ## Ohje
 
-* 1: .env tiedoston luominen seuraavilla muuttujilla:
+1: .env tiedoston määrittely
+
+Tiedostossa on oltava seuraavat muuttujat:
 
 ~~~
 DATABASE_URL=<postgresin-URI-tietokantaan>
 SECRET_KEY=<salainen-avain-flaskin-salausta-varten>
 ~~~
 
-* 2: Riippuvuuksien asentaminen poetryn avulla:
+2: Riippuvuuksien asentaminen poetryn avulla
 
 ~~~
 poetry install
 ~~~
 
-* 3: Tietokannan scheman määrittäminen:
+3: Tietokannan scheman määrittäminen
+
+Kun tietokanta on lokaalisti pyörimässä, scheman voi määrittää seuraavasti:
 
 ~~~
 psql < schema.sql
 ~~~
 
-* 4: Sovelluksen käynnistäminen:
+4: Sovelluksen käynnistäminen
 
 ~~~
 poetry run flask --app application/main.py run --debug 
+~~~
+
+tai
+
+~~~
+bash launch_debug.sh
 ~~~
 
 ## Välipalautus 2 tilanne
