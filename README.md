@@ -7,8 +7,15 @@
 Tiedostossa on oltava seuraavat muuttujat:
 
 ~~~
-DATABASE_URL=<postgresin-URI-tietokantaan>
-SECRET_KEY=<salainen-avain-flaskin-salausta-varten>
+DATABASE_URL="<postgresin-URI-tietokantaan>"
+SECRET_KEY="<salainen-avain-flaskin-salausta-varten>"
+~~~
+
+Jos PostgreSQL on asennettu ![kurssin asennusskriptin](https://github.com/hy-tsoha/local-pg) avulla,
+tiedostoon voi pistää suoraan
+
+~~~
+DATABASE_URL="postgresql+psycopg2://" 
 ~~~
 
 2: Riippuvuuksien asentaminen poetryn avulla
