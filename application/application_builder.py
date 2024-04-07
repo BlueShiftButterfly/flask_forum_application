@@ -1,6 +1,8 @@
 import os
 import string
 from flask import Flask, render_template, session
+from flask.cli import AppGroup
+import click
 from flask_talisman import Talisman
 from flask_login import LoginManager
 from dotenv import load_dotenv, find_dotenv
@@ -12,6 +14,8 @@ from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
 from application.thread import create_thread
+from application.forum import create_forum
+from application.example_content import create_example_content
 
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
@@ -61,4 +65,13 @@ def create_app(test_config=None):
 
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"
+    
+    user_cli = AppGroup('demo')
+
+    @user_cli.command('create')
+    def create_demo():
+        create_example_content(db, auth)
+
+    app.cli.add_command(user_cli)
+
     return app

@@ -32,6 +32,20 @@ Kun tietokanta on lokaalisti pyörimässä, scheman voi määrittää seuraavast
 psql < schema.sql
 ~~~
 
+3.5: Demodatan lisääminen
+
+Halutessaan sovellukseen voi lisätä demodataa seuraavalla komennolla:
+
+~~~
+poetry run flask --app application/main.py demo create
+~~~
+
+tai
+
+~~~
+bash create_demo.sh
+~~~
+
 4: Sovelluksen käynnistäminen
 
 ~~~
