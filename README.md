@@ -1,24 +1,34 @@
 # flask_forum_application
 
-## Välipalautus 1 tilanne
+## Ohje
 
-Sovelluksen voi käynnistää linuxilla käyttämällä komentoa
+* 1: .env tiedoston luominen seuraavilla muuttujilla:
 
-`bash launch_debug.sh`
+~~~
+DATABASE_URL=<postgresin-URI-tietokantaan>
+SECRET_KEY=<salainen-avain-flaskin-salausta-varten>
+~~~
 
-tai yleisesti poetry:n kautta:
+* 2: Riippuvuuksien asentaminen poetryn avulla:
 
-`poetry run flask --app application/main.py run --debug`
+~~~
+poetry install
+~~~
 
-Sovelluksessa käyttäjä voi:
+* 3: Tietokannan scheman määrittäminen:
 
-* Luoda tunnukset sivulta /account/signup
-* Kirjautua sisään sivulta /account/login
-* Kirjautua ulos sivulta /account/logout
+~~~
+psql < schema.sql
+~~~
 
-Sovelluksen index sivu näyttää kirjautuneen käyttäjän nimen.
+* 4: Sovelluksen käynnistäminen:
 
-Sovellus ei vielä talleta tietoja tietokantaan.
+~~~
+poetry run flask --app application/main.py run --debug 
+~~~
+
+## Välipalautus 2 tilanne
+
 
 ## Valittu aihe:
 
