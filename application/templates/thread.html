@@ -1,8 +1,9 @@
 {% extends "base_layout.html" %}
-{% block title %}{{thread.title}}{% endblock %}
+{% block title %}{{thread.title}} - {{forum_name}}{% endblock %}
 
 {% block content %}
   <p>Forum: {{forum_name}}</p>
-  <p>{{thread.title}}</p>
+  <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
+  <p>Posted by {{user.username}} at {{post_date}}</p>
 {% endblock %}
