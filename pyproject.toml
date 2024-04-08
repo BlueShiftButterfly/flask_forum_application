@@ -14,7 +14,6 @@ bcrypt = "^4.1.2"
 flask-sqlalchemy = "^3.1.1"
 psycopg2 = "^2.9.9"
 flask-login = "^0.6.3"
-flask-talisman = "^1.1.0"
 shortuuid = "^1.0.13"
 
 

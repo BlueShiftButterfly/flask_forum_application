@@ -1,9 +1,7 @@
 import os
 import string
-from flask import Flask, render_template, session
+from flask import Flask
 from flask.cli import AppGroup
-import click
-from flask_talisman import Talisman
 from flask_login import LoginManager
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
@@ -13,37 +11,20 @@ from application.blueprints.thread import ThreadBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
-from application.thread import create_thread
-from application.forum import create_forum
 from application.example_content import create_example_content
 
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
 
-def create_app(test_config=None):
+def create_app():
     load_dotenv(find_dotenv())
 
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
     login_manager = LoginManager(app)
-    Talisman(app)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY")
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
-
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
-
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
 
     db = DatabaseBridge(app, debug=True)
     auth = Authenticator(
@@ -55,8 +36,6 @@ def create_app(test_config=None):
     ab = AccountBlueprint(auth)
     fb = ForumBlueprint(db)
     tb = ThreadBlueprint(db)
-
-    #fb.blueprint.register_blueprint(tb.blueprint)
 
     app.register_blueprint(ib.blueprint)
     app.register_blueprint(ab.blueprint)

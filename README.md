@@ -48,6 +48,8 @@ bash create_demo.sh
 
 4: Sovelluksen käynnistäminen
 
+Debug versiona:
+
 ~~~
 poetry run flask --app application/main.py run --debug 
 ~~~
@@ -56,6 +58,18 @@ tai
 
 ~~~
 bash launch_debug.sh
+~~~
+
+Tavallisena:
+
+~~~
+poetry run flask --app application/main.py run 
+~~~
+
+tai
+
+~~~
+bash launch.sh
 ~~~
 
 ## Välipalautus 2 tilanne
