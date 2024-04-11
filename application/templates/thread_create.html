@@ -1,0 +1,17 @@
+{% extends "base_layout.html" %}
+{% block title %}Create Thread - {{forum_name}}{% endblock %}
+
+{% block content %}
+  <p>Forum: {{forum_name}}</p>
+  <h2>Create Thread</h2>
+  <form action="" method="POST">
+    <h3>Title</h3>
+    <input type="text" name="thread_title" size="56">
+    <h3>Content</h3>
+    <textarea name="thread_content" rows="8" cols="64"></textarea>
+    <p></p>
+    <input type="submit" value="Submit">
+    <a href="{{forum_url}}">Cancel</a>
+  </form>
+  
+{% endblock %}

@@ -3,6 +3,7 @@
 
 {% block content %}
   <p>this is a forum named {{forum_name}}</p>
+  <a href="{{ create_link }}">Create Thread</a>
   <p>Threads:</p>
   <ul>
     {% for item in threads %}
