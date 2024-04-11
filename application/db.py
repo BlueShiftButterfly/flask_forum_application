@@ -5,10 +5,9 @@ from application.forum import Forum
 from application.thread import Thread
 
 class DatabaseBridge:
-    def __init__(self, app, debug: bool = False) -> None:
+    def __init__(self, app) -> None:
         self.__app = app
         self.__db = SQLAlchemy(app)
-        self.__debug = debug
 
     def add_user(self, user: User):
         sql = "INSERT INTO users (uuid, username, password_hash, created, is_authenticated, is_active) VALUES (:uuid_var, :username_var, :passwordhash_var, :created_var, :is_authenticated_var, :is_active_var)"

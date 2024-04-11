@@ -26,7 +26,7 @@ def create_app():
     )
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
 
-    db = DatabaseBridge(app, debug=True)
+    db = DatabaseBridge(app)
     auth = Authenticator(
         db,
         UsernameValidator(3,30, UN_CHARACTERS),
