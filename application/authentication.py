@@ -71,14 +71,12 @@ class Authenticator:
         user: User = self.db_bridge.get_user_by_username(username)
         if user is not None:
             if flask_login.login_user(user) and check_password(password, user.password_hash):
-                print(f"User {user.username} authenticated")
                 return True
         return False
 
     def signup(self, username, password):
         un_result = self.username_validator.validate(username, self.db_bridge.get_usernames())
         pw_result = self.password_validator.validate(password)
-        print(un_result, pw_result)
         if(
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
@@ -86,7 +84,6 @@ class Authenticator:
             timestamp = get_utc_timestamp()
             new_user = User(str(uuid.uuid4()), username, hash_password(password), timestamp, True, True, False)
             self.db_bridge.add_user(new_user)
-            print("Added user: ", new_user.uuid, new_user.username)
             flask_login.login_user(new_user)
             return True
         return False
