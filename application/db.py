@@ -138,7 +138,7 @@ class DatabaseBridge:
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
 
-    def remove_user(self, uuid: str):
+    def remove_thread(self, uuid: str):
         sql = "DELETE FROM threads WHERE uuid=:uuid"
         sql_args = {
             "uuid": uuid
