@@ -1,9 +1,8 @@
 import uuid
 import flask_login
-from application.user import User
+from application.user import User, create_user
 from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
-from application.timestamp import get_utc_timestamp
 from enum import Enum
 from application.string_validator import is_length_valid, are_characters_valid
 
@@ -81,8 +80,7 @@ class Authenticator:
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
         ):
-            timestamp = get_utc_timestamp()
-            new_user = User(str(uuid.uuid4()), username, hash_password(password), timestamp, True, True, False)
+            new_user = create_user(username, hash_password(password))
             self.db_bridge.add_user(new_user)
             flask_login.login_user(new_user)
             return True
