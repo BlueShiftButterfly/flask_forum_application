@@ -18,7 +18,7 @@ class ThreadCreateView(View):
         if request.method == "POST":
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
-            new_thread = create_thread(title, content, current_user.uuid, forum.uuid)
+            new_thread = create_thread(title, content, self.db.get_user_db_id(current_user.uuid), self.db.get_forum_db_id(forum.uuid))
             self.db.add_thread(new_thread)
             return redirect(f"/forum/{forum_name}/thread/{new_thread.uuid}")
         abort(404)

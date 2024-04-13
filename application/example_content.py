@@ -11,11 +11,11 @@ from application.user import User
 # ONLY FOR LOCAL DEMO ONLY!
 # Creates demo content for local testing
 
-def create_example_content(db: DatabaseBridge, auth: Authenticator):
+def create_example_content(db: DatabaseBridge):
     db.add_user(User("placeholder_uuid", "example_user", "password_hash", 0, True, True, False))
     pyforum: Forum = create_forum("python", "Python")
     qaforum: Forum = create_forum("questions", "Questions")
     db.add_forum(pyforum)
     db.add_forum(qaforum)
-    db.add_thread(create_thread("Is python the best language?","maybe", "placeholder_uuid", pyforum.uuid))
-    db.add_thread(create_thread("How to exit vim","help", "placeholder_uuid", qaforum.uuid))
+    db.add_thread(create_thread("Is python the best language?","maybe", 1, 1))
+    db.add_thread(create_thread("How to exit vim","help", 1, 2))

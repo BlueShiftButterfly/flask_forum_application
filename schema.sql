@@ -21,7 +21,7 @@ CREATE TABLE threads (
     uuid TEXT,
     title TEXT,
     content TEXT,
-    poster_uuid TEXT,
-    forum_uuid TEXT,
+    poster_id INTEGER REFERENCES users,
+    forum_id INTEGER REFERENCES forums,
     created INT
 );

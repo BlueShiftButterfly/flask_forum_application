@@ -49,7 +49,7 @@ def create_app():
 
     @user_cli.command('create')
     def create_demo():
-        create_example_content(db, auth)
+        create_example_content(db)
 
     app.cli.add_command(user_cli)
 

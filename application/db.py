@@ -50,6 +50,26 @@ class DatabaseBridge:
             return None
         return User(result[0], result[1], result[2], result[3], result[4], result[5], False)
 
+    def get_user_by_id(self, db_id: int):
+        sql = "SELECT uuid, username, password_hash, created, is_authenticated, is_active FROM users WHERE id=:id"
+        sql_args = {
+            "id": db_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        return User(result[0], result[1], result[2], result[3], result[4], result[5], False)
+
+    def get_user_db_id(self, uuid: str):
+        sql = "SELECT id, uuid FROM users WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None or result[1] != uuid:
+            return None
+        return result[0]
+
     def get_usernames(self):
         sql = "SELECT username FROM users"
         result = self.__db.session.execute(text(sql)).fetchall()
@@ -114,6 +134,26 @@ class DatabaseBridge:
             return None
         return Forum(result[0], result[1], result[2], result[3])
 
+    def get_forum_by_id(self, db_id: int):
+        sql = "SELECT uuid, url_name, display_name, created FROM forums WHERE id=:id"
+        sql_args = {
+            "id": db_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        return Forum(result[0], result[1], result[2], result[3])
+
+    def get_forum_db_id(self, uuid: str):
+        sql = "SELECT id, uuid FROM forums WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None or result[1] != uuid:
+            return None
+        return result[0]
+
     def get_all_forums(self):
         sql = "SELECT uuid, url_name, display_name, created FROM forums"
         result = self.__db.session.execute(text(sql)).fetchall()
@@ -125,13 +165,13 @@ class DatabaseBridge:
         return forum_objects
 
     def add_thread(self, thread: Thread):
-        sql = "INSERT INTO threads (uuid, title, content, poster_uuid, forum_uuid, created) VALUES (:uuid, :title, :content, :poster_uuid, :forum_uuid, :created)"
+        sql = "INSERT INTO threads (uuid, title, content, poster_id, forum_id, created) VALUES (:uuid, :title, :content, :poster_id, :forum_id, :created)"
         sql_args = {
             "uuid": thread.uuid,
             "title": thread.title,
             "content": thread.content,
-            "poster_uuid": thread.poster_uuid,
-            "forum_uuid": thread.forum_uuid,
+            "poster_id": thread.poster_id,
+            "forum_id": thread.forum_id,
             "created": thread.creation_timestamp
         }
         self.__db.session.execute(text(sql), sql_args)
@@ -146,7 +186,7 @@ class DatabaseBridge:
         self.__db.session.commit()
 
     def get_thread_by_uuid(self, uuid: str):
-        sql = "SELECT uuid, title, content, poster_uuid, forum_uuid, created FROM threads WHERE uuid=:uuid"
+        sql = "SELECT uuid, title, content, poster_id, forum_id, created FROM threads WHERE uuid=:uuid"
         sql_args = {
             "uuid": uuid
         }
@@ -156,10 +196,10 @@ class DatabaseBridge:
         
         return Thread(result[0], result[1], result[2], result[3], result[4], result[5])
 
-    def get_threads_in_forum(self, forum_uuid: str):
-        sql = "SELECT uuid, title, content, poster_uuid, forum_uuid, created FROM threads WHERE forum_uuid=:forum_uuid"
+    def get_threads_in_forum(self, forum_id: int):
+        sql = "SELECT uuid, title, content, poster_id, forum_id, created FROM threads WHERE forum_id=:forum_id"
         sql_args = {
-            "forum_uuid": forum_uuid
+            "forum_id": forum_id
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchall()
         if result is None:
