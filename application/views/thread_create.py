@@ -2,7 +2,6 @@ from flask.views import View
 from flask import render_template, request, abort, redirect
 from flask_login import login_required, current_user
 from application.db import DatabaseBridge
-from application.thread import create_thread
 
 class ThreadCreateView(View):
     methods = ["GET", "POST"]
@@ -18,7 +17,6 @@ class ThreadCreateView(View):
         if request.method == "POST":
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
-            new_thread = create_thread(title, content, self.db.get_user_db_id(current_user.uuid), self.db.get_forum_db_id(forum.uuid))
-            self.db.add_thread(new_thread)
+            new_thread = self.db.create_thread(title, content, current_user.db_id, forum.db_id)
             return redirect(f"/forum/{forum_name}/thread/{new_thread.uuid}")
         abort(404)

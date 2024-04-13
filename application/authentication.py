@@ -1,5 +1,5 @@
 import flask_login
-from application.database_models.user import User, create_user
+from application.database_models.user import User
 from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
 from enum import Enum
@@ -79,8 +79,7 @@ class Authenticator:
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
         ):
-            new_user = create_user(username, hash_password(password))
-            self.db_bridge.add_user(new_user)
+            new_user = self.db_bridge.create_user(username, hash_password(password))
             flask_login.login_user(new_user)
             return True
         return False

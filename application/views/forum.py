@@ -13,7 +13,7 @@ class ForumView(View):
         if request.method == "GET":
             forum = self.db.get_forum_by_url_name(forum_name)
             if forum:
-                thread_objects = self.db.get_threads_in_forum(self.db.get_forum_db_id(forum.uuid))
+                thread_objects = self.db.get_threads_in_forum(forum.db_id)
                 threads = [
                     (
                         t.title, 
