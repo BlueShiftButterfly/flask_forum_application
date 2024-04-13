@@ -1,8 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from application.user import User
-from application.forum import Forum
-from application.thread import Thread
+from application.database_models.user import User
+from application.database_models.forum import Forum
+from application.database_models.thread import Thread
 
 class DatabaseBridge:
     def __init__(self, app) -> None:

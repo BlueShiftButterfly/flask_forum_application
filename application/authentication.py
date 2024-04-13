@@ -1,6 +1,5 @@
-import uuid
 import flask_login
-from application.user import User, create_user
+from application.database_models.user import User, create_user
 from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
 from enum import Enum
