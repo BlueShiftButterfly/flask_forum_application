@@ -243,6 +243,7 @@ class DatabaseBridge:
             "uuid": comment_uuid,
             "content": content,
             "poster_id": poster_id,
+            "thread_id": thread_id,
             "created_at": comment_timestamp,
             "last_edited_at": -1,
             "is_reply": is_reply,
