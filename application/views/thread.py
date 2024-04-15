@@ -1,5 +1,5 @@
 from flask.views import View
-from flask import render_template, request, redirect, url_for, abort
+from flask import render_template, request, abort
 from application.db import DatabaseBridge
 from application.timestamp import get_date_from_timestamp
 

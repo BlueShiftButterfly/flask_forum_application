@@ -1,5 +1,5 @@
 from flask.views import View
-from flask import render_template, request, redirect, url_for
+from flask import render_template
 from application.db import DatabaseBridge
 
 class IndexView(View):

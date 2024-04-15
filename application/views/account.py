@@ -1,6 +1,6 @@
 from flask.views import View
-from flask_login import login_required, current_user
-from flask import render_template, request, redirect, url_for, session
+from flask_login import login_required
+from flask import render_template, request, redirect, url_for
 from application.authentication import Authenticator
 
 class LoginView(View):
