@@ -6,7 +6,9 @@ class Forum:
     uuid: str
     url_name: str
     display_name: str
-    creation_timestamp: str
+    forum_description: str
+    created_at: int
+    creator_id: int
 
     @property
     def url(self):

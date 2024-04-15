@@ -14,7 +14,7 @@ class ThreadView(View):
             forum = self.db.get_forum_by_url_name(forum_name)
             thread = self.db.get_thread_by_uuid(thread_id)
             user = self.db.get_user_by_id(thread.poster_id)
-            post_date = str(get_date_from_timestamp(thread.creation_timestamp))
+            post_date = str(get_date_from_timestamp(thread.created_at))
             if forum.uuid == self.db.get_forum_by_id(thread.forum_id).uuid:
                 return render_template(self.template, forum_name=forum.display_name, thread=thread, user=user, post_date=post_date)
         abort(404)

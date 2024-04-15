@@ -19,7 +19,7 @@ class ForumView(View):
                         t.title, 
                         t.content,
                         self.db.get_user_by_id(t.poster_id).username,
-                        get_date_from_timestamp(t.creation_timestamp),
+                        get_date_from_timestamp(t.created_at),
                         f"{forum.url}/thread/{t.uuid}"
                     ) 
                     for t in thread_objects

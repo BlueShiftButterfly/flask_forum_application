@@ -6,7 +6,7 @@ class User:
     uuid: str
     username: str
     password_hash: str
-    creation_timestamp: int
+    created_at: int
     is_authenticated: bool
     is_active: bool
     is_anonymous: bool

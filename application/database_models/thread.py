@@ -8,4 +8,5 @@ class Thread:
     content: str
     poster_id: int
     forum_id: int
-    creation_timestamp: int
+    created_at: int
+    last_edited_at: int

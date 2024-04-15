@@ -3,7 +3,7 @@ CREATE TABLE users (
     uuid TEXT,
     username TEXT,
     password_hash TEXT,
-    created INT,
+    created_at INT,
     is_authenticated BOOLEAN,
     is_active BOOLEAN
 );
@@ -13,7 +13,9 @@ CREATE TABLE forums (
     uuid TEXT,
     url_name TEXT,
     display_name TEXT,
-    created INT
+    forum_description TEXT,
+    created_at INT,
+    creator_id INTEGER REFERENCES users (id)
 );
 
 CREATE TABLE threads (
@@ -21,7 +23,8 @@ CREATE TABLE threads (
     uuid TEXT,
     title TEXT,
     content TEXT,
-    poster_id INTEGER REFERENCES users,
-    forum_id INTEGER REFERENCES forums,
-    created INT
+    poster_id INTEGER REFERENCES users (id),
+    forum_id INTEGER REFERENCES forums (id),
+    created_at INT,
+    last_edited_at INT
 );
