@@ -3,8 +3,8 @@ import shortuuid
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from application.database_models.user import User
-from application.database_models.forum import Forum, create_forum
-from application.database_models.thread import Thread, create_thread
+from application.database_models.forum import Forum
+from application.database_models.thread import Thread
 from application.timestamp import get_utc_timestamp
 
 class DatabaseBridge:
