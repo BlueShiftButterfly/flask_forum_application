@@ -1,9 +1,4 @@
-import uuid
 from dataclasses import dataclass
-from application.timestamp import get_utc_timestamp
-
-def create_user(username: str, password_hash: str):
-    return User(-1, str(uuid.uuid4()), username, password_hash, get_utc_timestamp(), True, True, False)
 
 @dataclass
 class User:

@@ -1,8 +1,11 @@
+import uuid
+import shortuuid
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from application.database_models.user import User, create_user
+from application.database_models.user import User
 from application.database_models.forum import Forum, create_forum
 from application.database_models.thread import Thread, create_thread
+from application.timestamp import get_utc_timestamp
 
 class DatabaseBridge:
     def __init__(self, app) -> None:
@@ -10,23 +13,23 @@ class DatabaseBridge:
         self.__db = SQLAlchemy(app)
 
     def create_user(self, username: str, password_hash: str) -> User:
-        user = create_user(username, password_hash)
+        user_uuid = uuid.uuid4()
+        user_timestamp = get_utc_timestamp()
 
         sql = "INSERT INTO users (uuid, username, password_hash, created, is_authenticated, is_active) VALUES (:uuid, :username, :password_hash, :created, :is_authenticated, :is_active)"
         sql_args = {
-            "uuid": user.uuid,
-            "username": user.username,
-            "password_hash": user.password_hash,
-            "created": user.creation_timestamp,
-            "is_authenticated": user.is_authenticated,
-            "is_active": user.is_active
+            "uuid": user_uuid,
+            "username": username,
+            "password_hash": password_hash,
+            "created": user_timestamp,
+            "is_authenticated": True,
+            "is_active": True
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         self.__db.session.commit()
-        if result is None:
+        if result is None or result[0] <= 0:
             return None
-        user.db_id = result[0]
-        return user
+        return User(result[0], user_uuid, username, password_hash, user_timestamp, True, True)
 
     def remove_user(self, uuid: str):
         sql = "DELETE FROM users WHERE uuid=:uuid"
@@ -102,21 +105,21 @@ class DatabaseBridge:
         self.__db.session.commit()
 
     def create_forum(self, url_name: str, display_name: str) -> Forum:
-        forum = create_forum(url_name, display_name)
+        forum_uuid = uuid.uuid4()
+        forum_timestamp = get_utc_timestamp()
 
         sql = "INSERT INTO forums (uuid, url_name, display_name, created) VALUES (:uuid, :url_name, :display_name, :created)"
         sql_args = {
-            "uuid": forum.uuid,
-            "url_name": forum.url_name,
-            "display_name": forum.display_name,
-            "created": forum.creation_timestamp
+            "uuid": forum_uuid,
+            "url_name": url_name,
+            "display_name": display_name,
+            "created": forum_timestamp
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         self.__db.session.commit()
-        if result is None:
+        if result is None or result[0] <= 0:
             return None
-        forum.db_id = result[0]
-        return forum
+        return Forum(result[0], forum_uuid, url_name, display_name, forum_timestamp)
 
     def remove_forum(self, uuid: str):
         sql = "DELETE FROM forums WHERE uuid=:uuid"
@@ -177,23 +180,23 @@ class DatabaseBridge:
         return forum_objects
 
     def create_thread(self, title: str, content: str, poster_id: int, forum_id: int) -> Thread:
-        thread = create_thread(title, content, poster_id, forum_id)
+        thread_uuid = shortuuid.uuid()
+        thread_timestamp = get_utc_timestamp()
 
         sql = "INSERT INTO threads (uuid, title, content, poster_id, forum_id, created) VALUES (:uuid, :title, :content, :poster_id, :forum_id, :created)"
         sql_args = {
-            "uuid": thread.uuid,
-            "title": thread.title,
-            "content": thread.content,
-            "poster_id": thread.poster_id,
-            "forum_id": thread.forum_id,
-            "created": thread.creation_timestamp
+            "uuid": thread_uuid,
+            "title": title,
+            "content": content,
+            "poster_id": poster_id,
+            "forum_id": forum_id,
+            "created": thread_timestamp
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         self.__db.session.commit()
-        if result is None:
+        if result is None or result[0] <= 0:
             return None
-        thread.db_id = result[0]
-        return thread
+        return Thread(result[0], thread_uuid, title, content, poster_id, forum_id, thread_timestamp)
 
     def remove_thread(self, uuid: str):
         sql = "DELETE FROM threads WHERE uuid=:uuid"
