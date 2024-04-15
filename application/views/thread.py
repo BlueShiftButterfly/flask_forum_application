@@ -27,5 +27,4 @@ class ThreadView(View):
                 thread = self.db.get_thread_by_uuid(thread_uuid)
                 self.db.create_comment(comment_content, current_user.db_id, thread.db_id, False)
                 return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
-            else:
-                return redirect(url_for("account.login_view"))
+            return redirect(url_for("account.login_view"))
