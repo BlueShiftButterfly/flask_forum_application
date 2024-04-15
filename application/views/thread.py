@@ -1,5 +1,5 @@
 from flask.views import View
-from flask import render_template, request, abort
+from flask import render_template, request, abort, url_for
 from application.db import DatabaseBridge
 from application.timestamp import get_date_from_timestamp
 
@@ -16,5 +16,5 @@ class ThreadView(View):
             user = self.db.get_user_by_id(thread.poster_id)
             post_date = str(get_date_from_timestamp(thread.created_at))
             if forum.uuid == self.db.get_forum_by_id(thread.forum_id).uuid:
-                return render_template(self.template, forum_name=forum.display_name, thread=thread, user=user, post_date=post_date)
+                return render_template(self.template, forum=forum, thread=thread, user=user, post_date=post_date)
         abort(404)
