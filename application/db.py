@@ -5,6 +5,7 @@ from sqlalchemy.sql import text
 from application.database_models.user import User
 from application.database_models.forum import Forum
 from application.database_models.thread import Thread
+from application.database_models.comment import Comment
 from application.timestamp import get_utc_timestamp
 
 class DatabaseBridge:
@@ -232,3 +233,54 @@ class DatabaseBridge:
         for r in result:
             thread_objects.append(Thread(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
         return thread_objects
+
+    def create_comment(self, content: str, poster_id: int, thread_id: int, is_reply: bool, reply_comment_id: int = -1) -> Thread:
+        comment_uuid = str(shortuuid.uuid())
+        comment_timestamp = get_utc_timestamp()
+
+        sql = "INSERT INTO comments (uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at) VALUES (:uuid, :content, :poster_id, :thread_id, :is_reply, :reply_comment_id, :created_at, :last_edited_at) RETURNING id"
+        sql_args = {
+            "uuid": comment_uuid,
+            "content": content,
+            "poster_id": poster_id,
+            "created_at": comment_timestamp,
+            "last_edited_at": -1,
+            "is_reply": is_reply,
+            "reply_comment_id": reply_comment_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        self.__db.session.commit()
+        if result is None or result[0] <= 0:
+            return None
+        return Comment(result[0], comment_uuid, content, poster_id, thread_id, is_reply, reply_comment_id, comment_timestamp, -1)
+
+    def remove_comment(self, uuid: str):
+        sql = "DELETE FROM comments WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def get_comment_by_id(self, db_id: int):
+        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE id=:id"
+        sql_args = {
+            "id": db_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        return Comment(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
+
+    def get_comments_in_thread(self, thread_id: int):
+        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id"
+        sql_args = {
+            "thread_id": thread_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchall()
+        if result is None:
+            return None
+        comment_objects: list[Comment] = []
+        for r in result:
+            comment_objects.append(Comment(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8]))
+        return comment_objects

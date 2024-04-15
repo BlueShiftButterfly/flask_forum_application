@@ -28,3 +28,15 @@ CREATE TABLE threads (
     created_at INT,
     last_edited_at INT
 );
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    uuid TEXT,
+    content TEXT,
+    poster_id INTEGER REFERENCES users,
+    thread_id INTEGER REFERENCES threads,
+    is_reply BOOLEAN,
+    reply_comment_id INT,
+    created_at INT,
+    last_edited_at INT
+);
