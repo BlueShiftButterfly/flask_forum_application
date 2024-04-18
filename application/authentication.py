@@ -4,6 +4,7 @@ from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
 from enum import Enum
 from application.string_validator import is_length_valid, are_characters_valid
+from application.permissions import STANDARD
 
 class UsernameValidationResult(Enum):
     VALID = 0
@@ -79,7 +80,7 @@ class Authenticator:
             un_result == UsernameValidationResult.VALID and
             pw_result == PasswordValidationResult.VALID
         ):
-            new_user = self.db_bridge.create_user(username, hash_password(password))
+            new_user = self.db_bridge.create_user(username, hash_password(password), STANDARD)
             flask_login.login_user(new_user)
             return True
         return False
