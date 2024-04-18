@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from application.permissions import Role
 
 @dataclass
 class User:
@@ -10,6 +11,7 @@ class User:
     is_authenticated: bool
     is_active: bool
     is_anonymous: bool
+    role: Role
 
     def get_id(self):
         return self.uuid

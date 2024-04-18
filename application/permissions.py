@@ -7,7 +7,7 @@ class PermissionLevel(Enum):
     ALL_PUBLIC = 2
     FULL = 3
 
-class RoleAction(Enum):
+class ContentAction(Enum):
     VIEW = 0
     CREATE = 1
     EDIT = 2
@@ -15,69 +15,79 @@ class RoleAction(Enum):
 
 @dataclass(frozen=True)
 class Role:
-    forum_permissions: dict[RoleAction, PermissionLevel]
-    thread_permissions: dict[RoleAction, PermissionLevel]
-    comment_permissions: dict[RoleAction, PermissionLevel]
+    db_id: int
+    forum_permissions: dict[ContentAction, PermissionLevel]
+    thread_permissions: dict[ContentAction, PermissionLevel]
+    comment_permissions: dict[ContentAction, PermissionLevel]
 
 ADMINISTRATOR = Role(
+    0,
     {
-        RoleAction.VIEW: PermissionLevel.FULL,
-        RoleAction.CREATE: PermissionLevel.FULL,
-        RoleAction.EDIT: PermissionLevel.FULL,
-        RoleAction.DELETE: PermissionLevel.FULL
+        ContentAction.VIEW: PermissionLevel.FULL,
+        ContentAction.CREATE: PermissionLevel.FULL,
+        ContentAction.EDIT: PermissionLevel.FULL,
+        ContentAction.DELETE: PermissionLevel.FULL
     },
     {
-        RoleAction.VIEW: PermissionLevel.FULL,
-        RoleAction.CREATE: PermissionLevel.FULL,
-        RoleAction.EDIT: PermissionLevel.FULL,
-        RoleAction.DELETE: PermissionLevel.FULL
+        ContentAction.VIEW: PermissionLevel.FULL,
+        ContentAction.CREATE: PermissionLevel.FULL,
+        ContentAction.EDIT: PermissionLevel.FULL,
+        ContentAction.DELETE: PermissionLevel.FULL
     },
     {
-        RoleAction.VIEW: PermissionLevel.FULL,
-        RoleAction.CREATE: PermissionLevel.FULL,
-        RoleAction.EDIT: PermissionLevel.FULL,
-        RoleAction.DELETE: PermissionLevel.FULL
+        ContentAction.VIEW: PermissionLevel.FULL,
+        ContentAction.CREATE: PermissionLevel.FULL,
+        ContentAction.EDIT: PermissionLevel.FULL,
+        ContentAction.DELETE: PermissionLevel.FULL
     }
 )
 
-REGULAR = Role(
+STANDARD = Role(
+    1,
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.NONE,
-        RoleAction.EDIT: PermissionLevel.NONE,
-        RoleAction.DELETE: PermissionLevel.NONE
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.NONE,
+        ContentAction.EDIT: PermissionLevel.NONE,
+        ContentAction.DELETE: PermissionLevel.NONE
     },
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.FULL,
-        RoleAction.EDIT: PermissionLevel.OWNED_ONLY,
-        RoleAction.DELETE: PermissionLevel.OWNED_ONLY
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.FULL,
+        ContentAction.EDIT: PermissionLevel.OWNED_ONLY,
+        ContentAction.DELETE: PermissionLevel.OWNED_ONLY
     },
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.FULL,
-        RoleAction.EDIT: PermissionLevel.OWNED_ONLY,
-        RoleAction.DELETE: PermissionLevel.OWNED_ONLY
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.FULL,
+        ContentAction.EDIT: PermissionLevel.OWNED_ONLY,
+        ContentAction.DELETE: PermissionLevel.OWNED_ONLY
     }
 )
 
 ANONYMOUS = Role(
+    2,
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.NONE,
-        RoleAction.EDIT: PermissionLevel.NONE,
-        RoleAction.DELETE: PermissionLevel.NONE
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.NONE,
+        ContentAction.EDIT: PermissionLevel.NONE,
+        ContentAction.DELETE: PermissionLevel.NONE
     },
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.NONE,
-        RoleAction.EDIT: PermissionLevel.NONE,
-        RoleAction.DELETE: PermissionLevel.NONE
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.NONE,
+        ContentAction.EDIT: PermissionLevel.NONE,
+        ContentAction.DELETE: PermissionLevel.NONE
     },
     {
-        RoleAction.VIEW: PermissionLevel.ALL_PUBLIC,
-        RoleAction.CREATE: PermissionLevel.NONE,
-        RoleAction.EDIT: PermissionLevel.NONE,
-        RoleAction.DELETE: PermissionLevel.NONE
+        ContentAction.VIEW: PermissionLevel.ALL_PUBLIC,
+        ContentAction.CREATE: PermissionLevel.NONE,
+        ContentAction.EDIT: PermissionLevel.NONE,
+        ContentAction.DELETE: PermissionLevel.NONE
     }
 )
+
+ROLE_LOOKUP = [
+    ADMINISTRATOR,
+    STANDARD,
+    ANONYMOUS
+]

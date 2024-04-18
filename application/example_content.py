@@ -1,4 +1,5 @@
 from application.db import DatabaseBridge
+from application.permissions import STANDARD
 
 #
 # WARNING!!!
@@ -11,7 +12,7 @@ def create_example_content(db: DatabaseBridge):
     if db.get_user_by_username("example_user") is not None:
         print("Content already exists, exiting...")
         return
-    example_user = db.create_user("example_user", "password_hash")
+    example_user = db.create_user("example_user", "password_hash", STANDARD)
     if example_user is None:
         print("oh no")
         return

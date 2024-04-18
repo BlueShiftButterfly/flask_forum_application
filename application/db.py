@@ -7,30 +7,32 @@ from application.database_models.forum import Forum
 from application.database_models.thread import Thread
 from application.database_models.comment import Comment
 from application.timestamp import get_utc_timestamp
+from application.permissions import Role, ROLE_LOOKUP
 
 class DatabaseBridge:
     def __init__(self, app) -> None:
         self.__app = app
         self.__db = SQLAlchemy(app)
 
-    def create_user(self, username: str, password_hash: str) -> User:
+    def create_user(self, username: str, password_hash: str, role: Role) -> User:
         user_uuid = str(uuid.uuid4())
         user_timestamp = get_utc_timestamp()
 
-        sql = "INSERT INTO users (uuid, username, password_hash, created_at, is_authenticated, is_active) VALUES (:uuid, :username, :password_hash, :created_at, :is_authenticated, :is_active) RETURNING id"
+        sql = "INSERT INTO users (uuid, username, password_hash, created_at, is_authenticated, is_active, role_id) VALUES (:uuid, :username, :password_hash, :created_at, :is_authenticated, :is_active, :role_id) RETURNING id"
         sql_args = {
             "uuid": user_uuid,
             "username": username,
             "password_hash": password_hash,
             "created_at": user_timestamp,
             "is_authenticated": True,
-            "is_active": True
+            "is_active": True,
+            "role_id": role.db_id
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         self.__db.session.commit()
         if result is None or result[0] <= 0:
             return None
-        return User(result[0], user_uuid, username, password_hash, user_timestamp, True, True, False)
+        return User(result[0], user_uuid, username, password_hash, user_timestamp, True, True, False, role)
 
     def remove_user(self, uuid: str):
         sql = "DELETE FROM users WHERE uuid=:uuid"
@@ -41,34 +43,34 @@ class DatabaseBridge:
         self.__db.session.commit()
 
     def get_user_by_username(self, username: str):
-        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active FROM users WHERE username=:username"
+        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active, role_id FROM users WHERE username=:username"
         sql_args = {
             "username": username
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False)
+        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False, ROLE_LOOKUP[result[7]])
 
     def get_user_by_uuid(self, uuid: str):
-        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active FROM users WHERE uuid=:uuid"
+        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active, role_id FROM users WHERE uuid=:uuid"
         sql_args = {
             "uuid": uuid
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False)
+        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False, ROLE_LOOKUP[result[7]])
 
     def get_user_by_id(self, db_id: int):
-        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active FROM users WHERE id=:id"
+        sql = "SELECT id, uuid, username, password_hash, created_at, is_authenticated, is_active, role_id FROM users WHERE id=:id"
         sql_args = {
             "id": db_id
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False)
+        return User(result[0], result[1], result[2], result[3], result[4], result[5], result[6], False, ROLE_LOOKUP[result[7]])
 
     def get_user_db_id(self, uuid: str):
         sql = "SELECT id, uuid FROM users WHERE uuid=:uuid"

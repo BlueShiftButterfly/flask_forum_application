@@ -5,7 +5,8 @@ CREATE TABLE users (
     password_hash TEXT,
     created_at INT,
     is_authenticated BOOLEAN,
-    is_active BOOLEAN
+    is_active BOOLEAN,
+    role_id INT
 );
 
 CREATE TABLE forums (
