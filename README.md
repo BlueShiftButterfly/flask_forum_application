@@ -2,9 +2,9 @@
 
 [Ohje](#ohje)
 
-[Välipalautus 2 tilanne](#välipalautus-osa-2-tilanne)
+[Välipalautus 2 tilanne](#välipalautus-2-tilanne)
 
-[Välipalautus 3 tilanne](#välipalautus-osa-3-tilanne)
+[Välipalautus 3 tilanne](#välipalautus-3-tilanne)
 
 [Valittu Aihe](#valittu-aihe)
 
