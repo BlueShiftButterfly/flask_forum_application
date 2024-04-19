@@ -1,5 +1,13 @@
 # flask_forum_application
 
+[Ohje](#ohje)
+
+[Välipalautus 2 tilanne](#välipalautus-osa-2-tilanne)
+
+[Välipalautus 3 tilanne](#välipalautus-osa-3-tilanne)
+
+[Valittu Aihe](#valittu-aihe)
+
 ## Ohje
 
 1: .env tiedoston määrittely
@@ -79,6 +87,16 @@ Sovelluksessa käyttäjä voi luoda tunnukset ja kirjautua sisään/ulos.
 Käyttäjä voi lukea eri keskustelualueilla viestejä.
 
 Sovelluksessa ei voi vielä luoda keskustelualueita tai viestejä.
+
+## Välipalautus 3 tilanne
+
+Sovelluksessa käyttäjä voi luoda tunnukset ja kirjautua sisään/ulos.
+
+Käyttäjä voi lukea eri keskustelualueilla viestejä.
+
+Käyttäjä voi luoda keskusteluketjuja ja vastata niihin.
+
+Ylläpitäjä voi luoda keskustelualueen /create_forum osoitteessa
 
 ## Valittu aihe:
 
