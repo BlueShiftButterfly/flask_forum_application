@@ -1,7 +1,9 @@
 from flask.views import View
 from flask import render_template, request, abort
+from flask_login import current_user
 from application.db import DatabaseBridge
 from application.timestamp import get_date_from_timestamp
+from application.permissions import check_permissions_forum, ContentAction
 
 class ForumView(View):
     methods = ["GET", "POST"]
@@ -12,7 +14,7 @@ class ForumView(View):
     def dispatch_request(self, forum_name):
         if request.method == "GET":
             forum = self.db.get_forum_by_url_name(forum_name)
-            if forum:
+            if forum and check_permissions_forum(current_user, ContentAction.VIEW, forum):
                 thread_objects = self.db.get_threads_in_forum(forum.db_id)
                 threads = [
                     (

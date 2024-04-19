@@ -4,7 +4,7 @@ from application.db import DatabaseBridge
 from application.cryptography import check_password, hash_password
 from enum import Enum
 from application.string_validator import is_length_valid, are_characters_valid
-from application.permissions import STANDARD
+from application.permissions import STANDARD, ANONYMOUS
 
 class UsernameValidationResult(Enum):
     VALID = 0
@@ -84,6 +84,19 @@ class Authenticator:
             flask_login.login_user(new_user)
             return True
         return False
+
+    def get_anonymous_user(self):
+        return User(
+            -1,
+            "",
+            "ANONYMOUS",
+            "",
+            -1,
+            False,
+            False,
+            True,
+            ANONYMOUS
+        )
 
     def logout(self):
         flask_login.logout_user()

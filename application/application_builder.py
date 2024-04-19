@@ -44,6 +44,7 @@ def create_app():
 
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"
+    login_manager.anonymous_user = auth.get_anonymous_user
     
     user_cli = AppGroup('demo')
 
