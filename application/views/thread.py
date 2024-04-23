@@ -13,8 +13,6 @@ class ThreadView(View):
 
     def dispatch_request(self, forum_name, thread_uuid):
         thread = self.db.get_thread_by_uuid(thread_uuid)
-        print(check_permissions_thread(current_user, ContentAction.VIEW, thread))
-        print(check_permissions_comment(current_user, ContentAction.CREATE))
         if request.method == "GET" and check_permissions_thread(current_user, ContentAction.VIEW, thread):
             forum = self.db.get_forum_by_url_name(forum_name)
             user = self.db.get_user_by_id(thread.poster_id)

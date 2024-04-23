@@ -13,7 +13,6 @@ class ForumCreateView(View):
 
     @login_required
     def dispatch_request(self):
-        print(current_user.role)
         if request.method == "GET" and check_permissions_forum(current_user, ContentAction.CREATE):
             return render_template(self.template)
         if request.method == "POST" and check_permissions_forum(current_user, ContentAction.CREATE):
