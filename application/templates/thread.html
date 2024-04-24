@@ -6,11 +6,16 @@
   <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
   <p>Posted by {{user.username}} at {{post_date}}</p>
+  {% if delete_allowed == True %}
+  <form action="" method="POST">
+    <input type="submit" value="Delete Thread" name="delete_thread">
+  </form>
+  {% endif %}
   <form action="" method="POST">
     <h3>Write a Comment</h3>
     <textarea name="comment_content" rows="8" cols="64"></textarea>
     <p></p>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" name="comment_submit">
   </form>
   <ul>
     {% for comment in comments %}

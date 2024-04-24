@@ -20,11 +20,16 @@ class ThreadView(View):
             comments = self.db.get_comments_in_thread(thread.db_id)
             comment_objs = [(c.content, self.db.get_user_by_id(c.poster_id).username, str(get_date_from_timestamp(c.creation_timestamp))) for c in comments]
             if forum.uuid == self.db.get_forum_by_id(thread.forum_id).uuid:
-                return render_template(self.template, forum=forum, thread=thread, user=user, post_date=post_date, comments=comment_objs)
-        if request.method == "POST" and check_permissions_comment(current_user, ContentAction.CREATE):
+                return render_template(self.template, forum=forum, thread=thread, user=user, post_date=post_date, comments=comment_objs, delete_allowed=check_permissions_thread(current_user, ContentAction.DELETE, thread))
+        if request.method == "POST":
             if current_user.is_authenticated:
-                comment_content = request.form.get("comment_content")
-                self.db.create_comment(comment_content, current_user.db_id, thread.db_id, False)
-                return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
-            return redirect(url_for("account.login_view"))
+                if request.form.get("comment_submit") == "Submit" and check_permissions_comment(current_user, ContentAction.CREATE):
+                    comment_content = request.form.get("comment_content")
+                    self.db.create_comment(comment_content, current_user.db_id, thread.db_id, False)
+                    return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
+                if request.form.get("delete_thread") == "Delete Thread" and check_permissions_comment(current_user, ContentAction.DELETE, thread):
+                    self.db.remove_thread(thread.uuid)
+                    return redirect(url_for("forum.forum_view", forum_name=forum_name))
+            else:
+                return redirect(url_for("account.login_view"))
         abort(404)
