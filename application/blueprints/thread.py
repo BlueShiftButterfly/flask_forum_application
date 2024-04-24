@@ -1,5 +1,5 @@
 from flask import Blueprint
-from application.views import thread, thread_create, thread_delete
+from application.views import thread, thread_create
 
 class ThreadBlueprint:
     def __init__(self, db) -> None:
