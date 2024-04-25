@@ -8,10 +8,12 @@
   <p>Posted by {{user.username}} at {{post_date}}</p>
   {% if delete_allowed == True %}
   <form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Delete Thread" name="delete_thread">
   </form>
   {% endif %}
   <form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h3>Write a Comment</h3>
     <textarea name="comment_content" rows="8" cols="64"></textarea>
     <p></p>

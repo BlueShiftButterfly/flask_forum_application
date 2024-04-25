@@ -4,6 +4,7 @@
 {% block content %}
   <h2>Create Forum</h2>
   <form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h3>Title</h3>
     <input type="text" name="forum_name" size="56">
     <h3>URL name</h3>

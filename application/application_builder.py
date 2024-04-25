@@ -3,6 +3,7 @@ import string
 from flask import Flask
 from flask.cli import AppGroup
 from flask_login import LoginManager
+from flask_wtf import CSRFProtect
 from dotenv import load_dotenv, find_dotenv
 from application.blueprints.account import AccountBlueprint
 from application.blueprints.index import IndexBlueprint
@@ -21,10 +22,11 @@ def create_app():
 
     app = Flask(__name__)
     login_manager = LoginManager(app)
-    app.config.from_mapping(
-        SECRET_KEY=os.environ.get("SECRET_KEY")
-    )
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
+    app.config["WTF_CSRF_SECRET_KEY"] = os.environ.get("WTF_CSRF_SECRET_KEY")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+
+    csrf = CSRFProtect(app)
 
     db = DatabaseBridge(app)
     auth = Authenticator(

@@ -15,6 +15,7 @@ flask-sqlalchemy = "^3.1.1"
 psycopg2 = "^2.9.9"
 flask-login = "^0.6.3"
 shortuuid = "^1.0.13"
+flask-wtf = "^1.2.1"
 
 
 [build-system]
