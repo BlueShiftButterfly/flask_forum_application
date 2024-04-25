@@ -17,6 +17,7 @@ Tiedostossa on oltava seuraavat muuttujat:
 ~~~
 DATABASE_URL="<postgresin-URI-tietokantaan>"
 SECRET_KEY="<salainen-avain-flaskin-salausta-varten>"
+WTF_CSRF_SECRET_KEY="<salainen-avain-csrf-suojaustokenin-salausta-varten>"
 ~~~
 
 Jos PostgreSQL on asennettu ![kurssin asennusskriptin](https://github.com/hy-tsoha/local-pg) avulla,
