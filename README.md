@@ -15,7 +15,7 @@
 Tiedostossa on oltava seuraavat muuttujat:
 
 ~~~
-DATABASE_URL="<postgresin-URI-tietokantaan>"
+SQLALCHEMY_DATABASE_URI="<postgresin-URI-tietokantaan>"
 SECRET_KEY="<salainen-avain-flaskin-salausta-varten>"
 WTF_CSRF_SECRET_KEY="<salainen-avain-csrf-suojaustokenin-salausta-varten>"
 ~~~
@@ -24,7 +24,7 @@ Jos PostgreSQL on asennettu ![kurssin asennusskriptin](https://github.com/hy-tso
 tiedostoon voi pistää suoraan
 
 ~~~
-DATABASE_URL="postgresql+psycopg2://" 
+SQLALCHEMY_DATABASE_URI="postgresql+psycopg2://" 
 ~~~
 
 2: Riippuvuuksien asentaminen poetryn avulla
