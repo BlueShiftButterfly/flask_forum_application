@@ -236,6 +236,14 @@ class DatabaseBridge:
             thread_objects.append(Thread(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
         return thread_objects
 
+    def get_thread_count_in_forum(self, forum_id: int):
+        sql = "SELECT COUNT(*) FROM threads WHERE forum_id=:forum_id"
+        sql_args = {
+            "forum_id": forum_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()[0]
+        return result
+
     def create_comment(self, content: str, poster_id: int, thread_id: int, is_reply: bool, reply_comment_id: int = -1) -> Thread:
         comment_uuid = str(shortuuid.uuid())
         comment_timestamp = get_utc_timestamp()
@@ -287,3 +295,11 @@ class DatabaseBridge:
         for r in result:
             comment_objects.append(Comment(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8]))
         return comment_objects
+
+    def get_comment_count_in_thread(self, thread_id: int):
+        sql = "SELECT COUNT(*) FROM comments WHERE thread_id=:thread_id"
+        sql_args = {
+            "thread_id": thread_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()[0]
+        return result
