@@ -178,7 +178,7 @@ class DatabaseBridge:
         return result[0]
 
     def get_all_forums(self):
-        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums"
+        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums ORDER BY display_name"
         result = self.__db.session.execute(text(sql)).fetchall()
         if result is None:
             return None
@@ -227,7 +227,7 @@ class DatabaseBridge:
         return Thread(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
 
     def get_threads_in_forum(self, forum_id: int):
-        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE forum_id=:forum_id"
+        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE forum_id=:forum_id ORDER BY created_at"
         sql_args = {
             "forum_id": forum_id
         }
@@ -240,7 +240,7 @@ class DatabaseBridge:
         return thread_objects
 
     def get_thread_viewmodels_in_forum(self, forum_id: int):
-        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE forum_id=:forum_id"
+        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE forum_id=:forum_id ORDER BY t.created_at"
         sql_args = {
             "forum_id": forum_id
         }
@@ -310,7 +310,7 @@ class DatabaseBridge:
         return Comment(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
 
     def get_comments_in_thread(self, thread_id: int):
-        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id"
+        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id ORDER BY created_at"
         sql_args = {
             "thread_id": thread_id
         }
@@ -331,7 +331,7 @@ class DatabaseBridge:
         return result
 
     def get_comment_viewmodels_in_thread(self, thread_id: int):
-        sql = "SELECT c.content, u.username, c.created_at, c.last_edited_at, c.is_reply FROM comments c JOIN users u ON c.poster_id=u.id JOIN threads t ON c.thread_id=t.id WHERE thread_id=:thread_id"
+        sql = "SELECT c.content, u.username, c.created_at, c.last_edited_at, c.is_reply FROM comments c JOIN users u ON c.poster_id=u.id JOIN threads t ON c.thread_id=t.id WHERE thread_id=:thread_id ORDER BY c.created_at"
         sql_args = {
             "thread_id": thread_id
         }
