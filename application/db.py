@@ -110,24 +110,73 @@ class DatabaseBridge:
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
 
-    def create_forum(self, url_name: str, display_name: str, forum_description: str, creator_id: int) -> Forum:
+    def set_user_forum_access(self, user_id: int, forum_id: int, can_access: bool):
+        if self.check_if_user_access_exists(user_id, forum_id):
+            self.update_user_forum_access(user_id, forum_id, can_access)
+        else:
+            self.create_user_forum_access(user_id, forum_id, can_access)
+
+    def check_if_user_access_exists(self, user_id: int, forum_id: int):
+        sql = "SELECT p.has_access FROM private_forum_access p WHERE p.forum_id=:forum_id AND p.user_id=:user_id"
+        sql_args = {
+            "user_id": user_id,
+            "forum_id": forum_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        return result is not None
+
+    def create_user_forum_access(self, user_id: int, forum_id: int, can_access: bool):
+        sql = "INSERT INTO private_forum_access (user_id, forum_id, can_access) VALUES (:user_id, :forum_id, :can_access)"
+        sql_args = {
+            "user_id": user_id,
+            "forum_id": forum_id,
+            "can_access": can_access
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def update_user_forum_access(self, user_id: int, forum_id: int, can_access: bool):
+        sql = "UPDATE private_forum_access SET can_access=:can_access WHERE user_id=:user_id AND forum_id=:forum_id"
+        sql_args = {
+            "user_id": user_id,
+            "forum_id": forum_id,
+            "can_access": can_access
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def can_user_access_forum(self, user_id: int, forum_id: int) -> bool:
+        sql = "SELECT f.is_invite_only, p.has_access FROM forums f LEFT JOIN private_forum_access p ON f.id=p.forum_id AND p.user_id=:user_id WHERE f.id=:forum_id"
+        sql_args = {
+            "user_id": user_id,
+            "forum_id": forum_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return False
+        if result[0] == False:
+            return True
+        return result[1]
+
+    def create_forum(self, url_name: str, display_name: str, forum_description: str, creator_id: int, is_invite_only: bool) -> Forum:
         forum_uuid = str(uuid.uuid4())
         forum_timestamp = get_utc_timestamp()
 
-        sql = "INSERT INTO forums (uuid, url_name, display_name, forum_description, created_at, creator_id) VALUES (:uuid, :url_name, :display_name, :forum_description, :created_at, :creator_id) RETURNING id"
+        sql = "INSERT INTO forums (uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only) VALUES (:uuid, :url_name, :display_name, :forum_description, :created_at, :creator_id, :is_invite_only) RETURNING id"
         sql_args = {
             "uuid": forum_uuid,
             "url_name": url_name,
             "display_name": display_name,
             "forum_description": forum_description,
             "created_at": forum_timestamp,
-            "creator_id": creator_id
+            "creator_id": creator_id,
+            "is_invite_only": is_invite_only
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         self.__db.session.commit()
         if result is None or result[0] <= 0:
             return None
-        return Forum(result[0], forum_uuid, url_name, display_name, forum_description, forum_timestamp, creator_id)
+        return Forum(result[0], forum_uuid, url_name, display_name, forum_description, forum_timestamp, creator_id, is_invite_only)
 
     def remove_forum(self, uuid: str):
         sql = "DELETE FROM forums WHERE uuid=:uuid"
@@ -138,34 +187,34 @@ class DatabaseBridge:
         self.__db.session.commit()
 
     def get_forum_by_url_name(self, url_name: str):
-        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums WHERE url_name=:url_name"
+        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums WHERE url_name=:url_name"
         sql_args = {
             "url_name": url_name
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
 
     def get_forum_by_uuid(self, uuid: str):
-        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums WHERE uuid=:uuid"
+        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums WHERE uuid=:uuid"
         sql_args = {
             "uuid": uuid
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
 
     def get_forum_by_id(self, db_id: int):
-        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums WHERE id=:id"
+        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums WHERE id=:id"
         sql_args = {
             "id": db_id
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
 
     def get_forum_db_id(self, uuid: str):
         sql = "SELECT id, uuid FROM forums WHERE uuid=:uuid"
@@ -178,13 +227,13 @@ class DatabaseBridge:
         return result[0]
 
     def get_all_forums(self):
-        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id FROM forums ORDER BY display_name"
+        sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums ORDER BY display_name"
         result = self.__db.session.execute(text(sql)).fetchall()
         if result is None:
             return None
         forum_objects: list[Forum] = []
         for r in result:
-            forum_objects.append(Forum(r[0], r[1], r[2], r[3], r[4], r[5], r[6]))
+            forum_objects.append(Forum(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
         return forum_objects
 
     def create_thread(self, title: str, content: str, poster_id: int, forum_id: int) -> Thread:

@@ -16,7 +16,8 @@ CREATE TABLE forums (
     display_name TEXT,
     forum_description TEXT,
     created_at INT,
-    creator_id INTEGER REFERENCES users (id)
+    creator_id INTEGER REFERENCES users (id),
+    is_invite_only BOOLEAN
 );
 
 CREATE TABLE threads (
@@ -40,4 +41,11 @@ CREATE TABLE comments (
     reply_comment_id INT,
     created_at INT,
     last_edited_at INT
+);
+
+CREATE TABLE private_forum_access (
+    id SERIAL PRIMARY KEY,
+    forum_id INTEGER REFERENCES forums,
+    user_id INTEGER REFERENCES users,
+    has_access BOOLEAN
 );

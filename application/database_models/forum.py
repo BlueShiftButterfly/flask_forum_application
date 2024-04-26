@@ -9,6 +9,7 @@ class Forum:
     forum_description: str
     created_at: int
     creator_id: int
+    is_invite_only: bool
 
     @property
     def url(self):
