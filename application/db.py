@@ -1,13 +1,16 @@
 import uuid
 import shortuuid
+from flask import url_for
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from application.database_models.user import User
 from application.database_models.forum import Forum
 from application.database_models.thread import Thread
 from application.database_models.comment import Comment
-from application.timestamp import get_utc_timestamp
+from application.timestamp import get_utc_timestamp, get_date_from_timestamp
 from application.permissions import Role, ROLE_LOOKUP
+from application.viewmodels.thread_viewmodel import ThreadViewmodel
+from application.viewmodels.comment_viewmodel import CommentViewmodel
 
 class DatabaseBridge:
     def __init__(self, app) -> None:
@@ -236,6 +239,29 @@ class DatabaseBridge:
             thread_objects.append(Thread(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
         return thread_objects
 
+    def get_thread_viewmodels_in_forum(self, forum_id: int):
+        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE forum_id=:forum_id"
+        sql_args = {
+            "forum_id": forum_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchall()
+        if result is None:
+            return None
+        thread_objects: list[ThreadViewmodel] = []
+        for r in result:
+            thread_objects.append(ThreadViewmodel(r[0], r[1], r[2], get_date_from_timestamp(r[3]), url_for("thread.thread_view", forum_name=r[4], thread_uuid=r[5])))
+        return thread_objects
+
+    def get_thread_viewmodel(self, thread_id: int):
+        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE t.id=:thread_id"
+        sql_args = {
+            "thread_id": thread_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        return ThreadViewmodel(result[0], result[1], result[2], get_date_from_timestamp(result[3]), url_for("thread.thread_view", forum_name=result[4], thread_uuid=result[5]))
+
     def get_thread_count_in_forum(self, forum_id: int):
         sql = "SELECT COUNT(*) FROM threads WHERE forum_id=:forum_id"
         sql_args = {
@@ -303,3 +329,19 @@ class DatabaseBridge:
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()[0]
         return result
+
+    def get_comment_viewmodels_in_thread(self, thread_id: int):
+        sql = "SELECT c.content, u.username, c.created_at, c.last_edited_at, c.is_reply FROM comments c JOIN users u ON c.poster_id=u.id JOIN threads t ON c.thread_id=t.id WHERE thread_id=:thread_id"
+        sql_args = {
+            "thread_id": thread_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchall()
+        if result is None:
+            return None
+        thread_objects: list[CommentViewmodel] = []
+        for r in result:
+            edited_date = None
+            if r[3] != -1:
+                edited_date = get_date_from_timestamp(r[3])
+            thread_objects.append(CommentViewmodel(r[0], r[1], get_date_from_timestamp(r[2]), edited_date, "TODO", r[4], "TODO"))
+        return thread_objects

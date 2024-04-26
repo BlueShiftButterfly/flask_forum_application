@@ -15,12 +15,11 @@ class ThreadView(View):
         thread = self.db.get_thread_by_uuid(thread_uuid)
         if request.method == "GET" and check_permissions_thread(current_user, ContentAction.VIEW, thread):
             forum = self.db.get_forum_by_url_name(forum_name)
-            user = self.db.get_user_by_id(thread.poster_id)
-            post_date = str(get_date_from_timestamp(thread.created_at))
-            comments = self.db.get_comments_in_thread(thread.db_id)
-            comment_objs = [(c.content, self.db.get_user_by_id(c.poster_id).username, str(get_date_from_timestamp(c.creation_timestamp))) for c in comments]
-            if forum.uuid == self.db.get_forum_by_id(thread.forum_id).uuid:
-                return render_template(self.template, forum=forum, thread=thread, user=user, post_date=post_date, comments=comment_objs, delete_allowed=check_permissions_thread(current_user, ContentAction.DELETE, thread))
+            thread_vm = self.db.get_thread_viewmodel(thread.db_id)
+            comments = self.db.get_comment_viewmodels_in_thread(thread.db_id)
+            delete_allowed = check_permissions_thread(current_user, ContentAction.DELETE, thread)
+            forum_link = url_for("forum.forum_view", forum_name=forum.url_name)
+            return render_template(self.template, forum=forum, forum_link=forum_link, thread=thread_vm, comments=comments, delete_allowed=delete_allowed)
         if request.method == "POST":
             if current_user.is_authenticated:
                 if request.form.get("comment_submit") == "Submit" and check_permissions_comment(current_user, ContentAction.CREATE):

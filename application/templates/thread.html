@@ -2,10 +2,10 @@
 {% block title %}{{thread.title}} - {{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <p>Forum: {{forum.display_name}}</p>
+  <a href="{{ forum_link }}">{{ forum.display_name }}</a>
   <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
-  <p>Posted by {{user.username}} at {{post_date}}</p>
+  <p>Posted by {{thread.poster_username}} at {{localized_post_date}}</p>
   {% if delete_allowed == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -22,8 +22,8 @@
   <ul>
     {% for comment in comments %}
         <li>
-          <p>{{ comment[0] }}</p>
-          <p>Posted by {{ comment[1] }} at {{ comment[2] }}</p>
+          <p>{{ comment.content }}</p>
+          <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
         </li>
     {% endfor %}
   </ul>

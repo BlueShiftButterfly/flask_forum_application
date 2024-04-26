@@ -1,16 +1,16 @@
 {% extends "base_layout.html" %}
-{% block title %}{{forum_name}}{% endblock %}
+{% block title %}{{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <p>this is a forum named {{forum_name}}</p>
+  <p>this is a forum named {{forum.display_name}}</p>
   <a href="{{ create_link }}">Create Thread</a>
   <p>Threads:</p>
   <ul>
-    {% for item in threads %}
+    {% for thread in threads %}
         <li>
-          <a href="{{ item[4] }}">{{ item[0] }}</a>
-          <p>{{ item[1] }}</p>
-          <p>Posted by {{ item[2] }} at {{ item[3] }}</p>
+          <a href="{{ thread.link}}">{{ thread.title }}</a>
+          <p>{{ thread.content }}</p>
+          <p>Posted by {{ thread.poster_username }} at {{ thread.localized_post_date }}</p>
         </li>
     {% endfor %}
   </ul>
