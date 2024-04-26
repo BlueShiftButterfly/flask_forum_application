@@ -27,6 +27,12 @@ class UsernameValidator:
         self.min_length = min_length
         self.max_length = max_length
         self.valid_characters = valid_characters
+        self.validation_messages = {
+            UsernameValidationResult.VALID: "Username is valid.",
+            UsernameValidationResult.NOT_UNIQUE: "Username is already taken.",
+            UsernameValidationResult.INVALID_LENGTH: f"Username is too long or too short. It should be {self.min_length}-{self.max_length} characters long.",
+            UsernameValidationResult.INVALID_CHARACTERS: "Username contains invalid characters."
+        }
 
     def validate(self, username: str, other_usernames: set[str]) -> UsernameValidationResult:
         if username in other_usernames:
@@ -47,6 +53,11 @@ class PasswordValidator:
         self.min_length = min_length
         self.max_length = max_length
         self.valid_characters = valid_characters
+        self.validation_messages = {
+            PasswordValidationResult.VALID: "Password is valid.",
+            PasswordValidationResult.INVALID_LENGTH: f"Password is too long or too short. It should be {self.min_length}-{self.max_length} characters long.",
+            PasswordValidationResult.INVALID_CHARACTERS: "Password contains invalid characters."
+        }
 
     def validate(self, password: str) -> PasswordValidationResult:
         if not is_length_valid(password, self.min_length, self.max_length):
