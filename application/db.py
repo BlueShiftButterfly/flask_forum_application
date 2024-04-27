@@ -176,7 +176,8 @@ class DatabaseBridge:
         self.__db.session.commit()
         if result is None or result[0] <= 0:
             return None
-        return Forum(result[0], forum_uuid, url_name, display_name, forum_description, forum_timestamp, creator_id, is_invite_only)
+        creator = self.get_user_by_id(creator_id)
+        return Forum(result[0], forum_uuid, url_name, display_name, forum_description, forum_timestamp, creator, is_invite_only)
 
     def remove_forum(self, uuid: str):
         sql = "DELETE FROM forums WHERE uuid=:uuid"
@@ -194,7 +195,7 @@ class DatabaseBridge:
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], self.get_user_by_id(result[6]), result[7])
 
     def get_forum_by_uuid(self, uuid: str):
         sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums WHERE uuid=:uuid"
@@ -204,7 +205,7 @@ class DatabaseBridge:
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], self.get_user_by_id(result[6]), result[7])
 
     def get_forum_by_id(self, db_id: int):
         sql = "SELECT id, uuid, url_name, display_name, forum_description, created_at, creator_id, is_invite_only FROM forums WHERE id=:id"
@@ -214,7 +215,7 @@ class DatabaseBridge:
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
+        return Forum(result[0], result[1], result[2], result[3], result[4], result[5], self.get_user_by_id(result[6]), result[7])
 
     def get_forum_db_id(self, uuid: str):
         sql = "SELECT id, uuid FROM forums WHERE uuid=:uuid"
@@ -233,7 +234,7 @@ class DatabaseBridge:
             return None
         forum_objects: list[Forum] = []
         for r in result:
-            forum_objects.append(Forum(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
+            forum_objects.append(Forum(r[0], r[1], r[2], r[3], r[4], r[5], self.get_user_by_id(r[6]), r[7]))
         return forum_objects
 
     def create_thread(self, title: str, content: str, poster_id: int, forum_id: int) -> Thread:
@@ -254,7 +255,9 @@ class DatabaseBridge:
         self.__db.session.commit()
         if result is None or result[0] <= 0:
             return None
-        return Thread(result[0], thread_uuid, title, content, poster_id, forum_id, thread_timestamp, -1)
+        poster = self.get_user_by_id(poster_id)
+        forum = self.get_forum_by_id(forum_id)
+        return Thread(result[0], thread_uuid, title, content, poster, forum, thread_timestamp, -1)
 
     def remove_thread(self, uuid: str):
         sql = "DELETE FROM threads WHERE uuid=:uuid"
@@ -273,7 +276,18 @@ class DatabaseBridge:
         if result is None:
             return None
         
-        return Thread(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
+        return Thread(result[0], result[1], result[2], result[3], self.get_user_by_id(result[4]), self.get_forum_by_id(result[5]), result[6], result[7])
+
+    def get_thread_by_id(self, thread_id: int):
+        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE thread_id=:thread_id"
+        sql_args = {
+            "thread_id": thread_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        
+        return Thread(result[0], result[1], result[2], result[3], self.get_user_by_id(result[4]), self.get_forum_by_id(result[5]), result[6], result[7])
 
     def get_threads_in_forum(self, forum_id: int):
         sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE forum_id=:forum_id ORDER BY created_at"
@@ -285,7 +299,7 @@ class DatabaseBridge:
             return None
         thread_objects: list[Thread] = []
         for r in result:
-            thread_objects.append(Thread(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7]))
+            thread_objects.append(Thread(r[0], r[1], r[2], r[3], self.get_user_by_id(r[4]), self.get_forum_by_id(r[5]), r[6], r[7]))
         return thread_objects
 
     def get_thread_viewmodels_in_forum(self, forum_id: int):
@@ -338,7 +352,9 @@ class DatabaseBridge:
         self.__db.session.commit()
         if result is None or result[0] <= 0:
             return None
-        return Comment(result[0], comment_uuid, content, poster_id, thread_id, is_reply, reply_comment_id, comment_timestamp, -1)
+        poster = self.get_user_by_id(poster_id)
+        thread = self.get_thread_by_id(thread_id)
+        return Comment(result[0], comment_uuid, content, poster, thread, is_reply, reply_comment_id, comment_timestamp, -1)
 
     def remove_comment(self, uuid: str):
         sql = "DELETE FROM comments WHERE uuid=:uuid"
@@ -356,7 +372,7 @@ class DatabaseBridge:
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return Comment(result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7], result[8])
+        return Comment(result[0], result[1], result[2], self.get_user_by_id(result[3]), self.get_thread_by_id(result[4]), result[5], result[6], result[7], result[8])
 
     def get_comments_in_thread(self, thread_id: int):
         sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id ORDER BY created_at"
@@ -368,7 +384,7 @@ class DatabaseBridge:
             return None
         comment_objects: list[Comment] = []
         for r in result:
-            comment_objects.append(Comment(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8]))
+            comment_objects.append(Comment(r[0], r[1], r[2], self.get_user_by_id(r[3]), self.get_thread_by_id(r[4]), r[5], r[6], r[7], r[8]))
         return comment_objects
 
     def get_comment_count_in_thread(self, thread_id: int):

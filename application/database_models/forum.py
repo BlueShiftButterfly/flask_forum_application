@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from application.database_models.user import User
 
 @dataclass
 class Forum:
@@ -8,7 +9,7 @@ class Forum:
     display_name: str
     forum_description: str
     created_at: int
-    creator_id: int
+    creator: User
     is_invite_only: bool
 
     @property

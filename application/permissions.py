@@ -1,8 +1,5 @@
 from dataclasses import dataclass
 from enum import Enum
-from application.database_models.forum import Forum
-from application.database_models.thread import Thread
-from application.database_models.comment import Comment
 
 class PermissionLevel(Enum):
     NONE = 0
@@ -95,29 +92,38 @@ ROLE_LOOKUP = [
     ANONYMOUS
 ]
 
-def check_permissions_forum(user, action: ContentAction, forum: Forum=None) -> bool:
+def check_permissions_forum(user, action: ContentAction, forum=None) -> bool:
     permission_level = user.role.forum_permissions[action]
     if permission_level is PermissionLevel.OWNED_ONLY and forum is not None:
-        if forum.creator_id == user.db_id:
+        if forum.creator.db_id == user.db_id:
             return True
-    if permission_level is PermissionLevel.FULL or permission_level is PermissionLevel.ALL_PUBLIC:
+    if permission_level is PermissionLevel.ALL_PUBLIC and forum is not None:
+        if forum.is_invite_only == False:
+            return True
+    if permission_level is PermissionLevel.FULL:
         return True
     return False
 
-def check_permissions_thread(user, action: ContentAction, thread: Thread=None) -> bool:
+def check_permissions_thread(user, action: ContentAction, thread=None) -> bool:
     permission_level = user.role.thread_permissions[action]
     if permission_level is PermissionLevel.OWNED_ONLY and thread is not None:
-        if thread.poster_id == user.db_id:
+        if thread.poster.db_id == user.db_id:
             return True
-    if permission_level is PermissionLevel.FULL or permission_level is PermissionLevel.ALL_PUBLIC:
+    if permission_level is PermissionLevel.ALL_PUBLIC and thread is not None:
+        if thread.forum.is_invite_only == False:
+            return True
+    if permission_level is PermissionLevel.FULL:
         return True
     return False
 
-def check_permissions_comment(user, action: ContentAction, comment: Comment=None) -> bool:
+def check_permissions_comment(user, action: ContentAction, comment=None) -> bool:
     permission_level = user.role.comment_permissions[action]
     if permission_level is PermissionLevel.OWNED_ONLY and comment is not None:
-        if comment.poster_id == user.db_id:
+        if comment.poster.db_id == user.db_id:
             return True
-    if permission_level is PermissionLevel.FULL or permission_level is PermissionLevel.ALL_PUBLIC:
+    if permission_level is PermissionLevel.ALL_PUBLIC and comment is not None:
+        if comment.thread.forum.is_invite_only == False:
+            return True
+    if permission_level is PermissionLevel.FULL:
         return True
     return False

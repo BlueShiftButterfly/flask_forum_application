@@ -5,7 +5,7 @@
   <a href="{{ forum_link }}">{{ forum.display_name }}</a>
   <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
-  <p>Posted by {{thread.poster_username}} at {{localized_post_date}}</p>
+  <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }}</p>
   {% if delete_allowed == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

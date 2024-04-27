@@ -1,4 +1,6 @@
 from dataclasses import dataclass
+from application.database_models.user import User
+from application.database_models.forum import Forum
 
 @dataclass
 class Thread:
@@ -6,7 +8,7 @@ class Thread:
     uuid: str
     title: str
     content: str
-    poster_id: int
-    forum_id: int
+    poster: User
+    forum: Forum
     created_at: int
     last_edited_at: int

@@ -19,6 +19,6 @@ class ForumCreateView(View):
             forum_url_name = request.form.get("forum_url_name")
             forum_name = request.form.get("forum_name")
             forum_description = request.form.get("forum_description")
-            self.db.create_forum(forum_url_name, forum_name, forum_description, current_user.db_id)
+            self.db.create_forum(forum_url_name, forum_name, forum_description, current_user.db_id, False)
             return redirect(f"/forum/{forum_url_name}")
         abort(404)
