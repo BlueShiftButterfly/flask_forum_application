@@ -11,6 +11,7 @@ class Forum:
     created_at: int
     creator: User
     is_invite_only: bool
+    invited_users: set
 
     @property
     def url(self):
