@@ -14,8 +14,6 @@ from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
 from application.example_content import create_example_content
 
-#from werkzeug.middleware.profiler import ProfilerMiddleware
-
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
 
@@ -23,8 +21,6 @@ def create_app():
     load_dotenv(find_dotenv())
 
     app = Flask(__name__)
-
-    #app.wsgi_app = ProfilerMiddleware(app.wsgi_app)
 
     login_manager = LoginManager(app)
     app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
