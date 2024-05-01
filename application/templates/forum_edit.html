@@ -20,6 +20,8 @@
     {% endif %}
     <label for="is_invite_only">Is Invite Only</label>
     <p></p>
+    <textarea name="forum_invite_list" rows="8" cols="64">{{invite_list}}</textarea>
+    <p></p>
     <input type="submit" value="Submit">
     <a href="{{ cancel_link }}">Cancel</a>
   </form>

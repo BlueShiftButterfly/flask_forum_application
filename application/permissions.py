@@ -100,7 +100,7 @@ def check_permissions_forum(user, action: ContentAction, forum=None) -> bool:
     if permission_level is PermissionLevel.ALL_PUBLIC and forum is not None:
         if forum.is_invite_only == False:
             return True
-        elif user.uuid in forum.invited_users:
+        elif user.username in forum.invited_users:
             return True
     if permission_level is PermissionLevel.FULL:
         return True
@@ -114,7 +114,7 @@ def check_permissions_thread(user, action: ContentAction, thread=None) -> bool:
     if permission_level is PermissionLevel.ALL_PUBLIC and thread is not None:
         if thread.forum.is_invite_only == False:
             return True
-        elif user.uuid in thread.forum.invited_users:
+        elif user.username in thread.forum.invited_users:
             return True
     if permission_level is PermissionLevel.FULL:
         return True
@@ -128,7 +128,7 @@ def check_permissions_comment(user, action: ContentAction, comment=None) -> bool
     if permission_level is PermissionLevel.ALL_PUBLIC and comment is not None:
         if comment.thread.forum.is_invite_only == False:
             return True
-        elif user.uuid in comment.thread.forum.invited_users:
+        elif user.username in comment.thread.forum.invited_users:
             return True
     if permission_level is PermissionLevel.FULL:
         return True
