@@ -2,7 +2,9 @@
 {% block title %}Frontpage{% endblock %}
 
 {% block content %}
-  <p>some content</p>
+  {% if can_create_forum == True %}
+  <a href="{{ forum_create_link }}">Create Forum</a>
+  {% endif %}
   <p>List of forums:</p>
   <ul>
     {% for item in forums %}
