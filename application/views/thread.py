@@ -2,7 +2,6 @@ from flask.views import View
 from flask import render_template, request, abort, url_for, redirect
 from flask_login import current_user
 from application.db import DatabaseBridge
-from application.timestamp import get_date_from_timestamp
 from application.permissions import check_permissions_thread, check_permissions_comment, ContentAction
 
 class ThreadView(View):
@@ -17,9 +16,18 @@ class ThreadView(View):
             forum = self.db.get_forum_by_url_name(forum_name)
             thread_vm = self.db.get_thread_viewmodel(thread.db_id)
             comments = self.db.get_comment_viewmodels_in_thread(thread.db_id)
-            delete_allowed = check_permissions_thread(current_user, ContentAction.DELETE, thread)
-            forum_link = url_for("forum.forum_view", forum_name=forum.url_name)
-            return render_template(self.template, forum=forum, forum_link=forum_link, thread=thread_vm, comments=comments, delete_allowed=delete_allowed)
+            links = {
+                "edit": url_for("thread.thread_edit_view", forum_name=forum.url_name, thread_uuid=thread_uuid),
+                "delete": url_for("thread.thread_delete_view", forum_name=forum.url_name, thread_uuid=thread_uuid),
+                "forum": url_for("forum.forum_view", forum_name=forum_name)
+            }
+            permissions = {
+                "view": check_permissions_thread(current_user, ContentAction.VIEW, thread),
+                "create_comment": check_permissions_comment(current_user, ContentAction.CREATE),
+                "edit": check_permissions_thread(current_user, ContentAction.EDIT, thread),
+                "delete": check_permissions_thread(current_user, ContentAction.DELETE, thread)
+            }
+            return render_template(self.template, forum=forum, thread=thread_vm, comments=comments, links=links, permissions=permissions)
         if request.method == "POST":
             if current_user.is_authenticated:
                 if request.form.get("comment_submit") == "Submit" and check_permissions_comment(current_user, ContentAction.CREATE):

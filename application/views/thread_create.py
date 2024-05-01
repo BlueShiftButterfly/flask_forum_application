@@ -1,5 +1,5 @@
 from flask.views import View
-from flask import render_template, request, abort, redirect
+from flask import render_template, request, abort, redirect, url_for
 from flask_login import login_required, current_user
 from application.db import DatabaseBridge
 from application.permissions import check_permissions_thread, ContentAction
@@ -19,5 +19,5 @@ class ThreadCreateView(View):
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
             new_thread = self.db.create_thread(title, content, current_user.db_id, forum.db_id)
-            return redirect(f"/forum/{forum_name}/thread/{new_thread.uuid}")
+            return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=new_thread.uuid))
         abort(404)

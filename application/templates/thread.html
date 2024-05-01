@@ -2,16 +2,24 @@
 {% block title %}{{thread.title}} - {{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <a href="{{ forum_link }}">{{ forum.display_name }}</a>
+  <a href="{{ links['forum'] }}">{{ forum.display_name }}</a>
   <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
+  {% if thread.last_edited_localized_date == None %}
   <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }}</p>
-  {% if delete_allowed == True %}
+  {% else %}
+  <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }} (EDITED at {{ thread.last_edited_localized_date }})</p>
+  {% endif %}
+  {% if permissions["delete"] == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Delete Thread" name="delete_thread">
   </form>
   {% endif %}
+  {% if permissions["edit"] == True %}
+  <a href="{{ links['edit'] }}">Edit Thread</a>
+  {% endif %}
+  {% if permissions["create_comment"] == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h3>Write a Comment</h3>
@@ -19,6 +27,9 @@
     <p></p>
     <input type="submit" value="Submit" name="comment_submit">
   </form>
+  {% else %}
+  <h3>Log In or Sign Up to Comment</h3>
+  {% endif %}
   <ul>
     {% for comment in comments %}
         <li>

@@ -6,4 +6,5 @@ class ThreadViewmodel:
     content: str
     poster_username: str
     localized_post_date: str
+    last_edited_localized_date: str
     link: str

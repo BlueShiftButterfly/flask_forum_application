@@ -1,0 +1,18 @@
+{% extends "base_layout.html" %}
+{% block title %}{{thread.title}} - {{forum.display_name}}{% endblock %}
+
+{% block content %}
+  <p>Forum: {{ forum.display_name }}</p>
+  <h2>Edit Thread</h2>
+  <form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <h3>Title</h3>
+    <input type="text" name="thread_title" size="56" value="{{thread.title}}">
+    <h3>Content</h3>
+    <textarea name="thread_content" rows="8" cols="64">{{thread.content}}</textarea>
+    <p></p>
+    <input type="submit" value="Submit">
+    <a href="{{ thread_url }}">Cancel</a>
+  </form>
+  
+{% endblock %}

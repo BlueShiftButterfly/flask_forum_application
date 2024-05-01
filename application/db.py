@@ -287,6 +287,18 @@ class DatabaseBridge:
         forum = self.get_forum_by_id(forum_id)
         return Thread(result[0], thread_uuid, title, content, poster, forum, thread_timestamp, -1)
 
+    def update_thread(self, thread_id: int, title: str, content: str):
+        edit_timestamp = get_utc_timestamp()
+        sql = "UPDATE threads SET title=:title, content=:content, last_edited_at=:last_edited_at WHERE id=:id"
+        sql_args = {
+            "id": thread_id,
+            "title": title,
+            "content": content,
+            "last_edited_at": edit_timestamp
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
     def remove_thread(self, uuid: str):
         sql = "DELETE FROM threads WHERE uuid=:uuid"
         sql_args = {
@@ -331,7 +343,7 @@ class DatabaseBridge:
         return thread_objects
 
     def get_thread_viewmodels_in_forum(self, forum_id: int):
-        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE forum_id=:forum_id ORDER BY t.created_at"
+        sql = "SELECT t.title, t.content, u.username, t.created_at, t.last_edited_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE forum_id=:forum_id ORDER BY t.created_at"
         sql_args = {
             "forum_id": forum_id
         }
@@ -340,18 +352,24 @@ class DatabaseBridge:
             return None
         thread_objects: list[ThreadViewmodel] = []
         for r in result:
-            thread_objects.append(ThreadViewmodel(r[0], r[1], r[2], get_date_from_timestamp(r[3]), url_for("thread.thread_view", forum_name=r[4], thread_uuid=r[5])))
+            timestamp = get_date_from_timestamp(r[3])
+            edit_timestamp = get_date_from_timestamp(r[4])
+            thread_objects.append(ThreadViewmodel(r[0], r[1], r[2], timestamp, edit_timestamp, url_for("thread.thread_view", forum_name=r[5], thread_uuid=r[6])))
         return thread_objects
 
     def get_thread_viewmodel(self, thread_id: int):
-        sql = "SELECT t.title, t.content, u.username, t.created_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE t.id=:thread_id"
+        sql = "SELECT t.title, t.content, u.username, t.created_at, t.last_edited_at, f.url_name, t.uuid FROM threads t JOIN users u ON t.poster_id=u.id JOIN forums f ON t.forum_id=f.id WHERE t.id=:thread_id"
         sql_args = {
             "thread_id": thread_id
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:
             return None
-        return ThreadViewmodel(result[0], result[1], result[2], get_date_from_timestamp(result[3]), url_for("thread.thread_view", forum_name=result[4], thread_uuid=result[5]))
+        timestamp = get_date_from_timestamp(result[3])
+        edit_timestamp = None
+        if result[4] != -1:
+            edit_timestamp = get_date_from_timestamp(result[4])
+        return ThreadViewmodel(result[0], result[1], result[2], timestamp, edit_timestamp, url_for("thread.thread_view", forum_name=result[5], thread_uuid=result[6]))
 
     def get_thread_count_in_forum(self, forum_id: int):
         sql = "SELECT COUNT(*) FROM threads WHERE forum_id=:forum_id"
