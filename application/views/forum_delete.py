@@ -1,8 +1,7 @@
 from flask.views import View
-from flask import render_template, request, abort, redirect, url_for
+from flask import request, abort, redirect, url_for
 from flask_login import current_user, login_required
 from application.db import DatabaseBridge
-from application.timestamp import get_date_from_timestamp
 from application.permissions import check_permissions_forum, ContentAction
 
 class ForumDeleteView(View):
