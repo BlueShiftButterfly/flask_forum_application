@@ -187,6 +187,18 @@ class DatabaseBridge:
         creator = self.get_user_by_id(creator_id)
         return Forum(result[0], forum_uuid, url_name, display_name, forum_description, forum_timestamp, creator, is_invite_only, set())
 
+    def edit_forum(self, db_id: int, url_name: str, display_name: str, forum_description: str, is_invite_only: bool):
+        sql = "UPDATE forums SET url_name=:url_name, display_name=:display_name, forum_description=:forum_description, is_invite_only=:is_invite_only WHERE id=:id"
+        sql_args = {
+            "id": db_id,
+            "url_name": url_name,
+            "display_name": display_name,
+            "forum_description": forum_description,
+            "is_invite_only": is_invite_only
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
     def remove_forum(self, uuid: str):
         sql = "DELETE FROM forums WHERE uuid=:uuid"
         sql_args = {

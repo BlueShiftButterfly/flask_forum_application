@@ -2,8 +2,20 @@
 {% block title %}{{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <p>this is a forum named {{forum.display_name}}</p>
-  <a href="{{ create_link }}">Create Thread</a>
+  <h3>{{forum.display_name}}</h3>
+  <p>{{forum.forum_description}}</p>
+  {% if permissions["edit"] == True %}
+  <a href="{{ links['edit'] }}">Edit Forum Settings</a>
+  {% endif %}
+  {% if permissions["delete"] == True %}
+  <form action="{{ links['delete'] }}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <input type="submit" value="Delete Forum">
+  </form>
+  {% endif %}
+  {% if permissions["create_thread"] == True %}
+  <a href="{{ links['create_thread'] }}">Create Thread</a>
+  {% endif %}
   <p>Threads:</p>
   <ul>
     {% for thread in threads %}

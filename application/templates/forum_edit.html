@@ -1,0 +1,27 @@
+{% extends "base_layout.html" %}
+{% block title %}Edit Forum{% endblock %}
+
+{% block content %}
+  <h2>Edit Forum</h2>
+  <form action="" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    <h3>Display Name</h3>
+    <input type="text" name="forum_name" size="56" value="{{ forum.display_name }}">
+    <h3>URL name</h3>
+    <input type="text" name="forum_url_name" size="56" value="{{ forum.url_name }}">
+    <h3>Description</h3>
+    <textarea name="forum_description" rows="8" cols="64">{{forum.forum_description}}</textarea>
+    <p></p>
+    <h3>User Access</h3>
+    {% if forum.is_invite_only %}
+    <input type="checkbox" id="is_invite_only" name="is_invite_only" checked/>
+    {% else %}
+    <input type="checkbox" id="is_invite_only" name="is_invite_only"/>
+    {% endif %}
+    <label for="is_invite_only">Is Invite Only</label>
+    <p></p>
+    <input type="submit" value="Submit">
+    <a href="{{ cancel_link }}">Cancel</a>
+  </form>
+  
+{% endblock %}
