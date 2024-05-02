@@ -12,7 +12,9 @@ class ThreadView(View):
 
     def dispatch_request(self, forum_name, thread_uuid):
         thread = self.db.get_thread_by_uuid(thread_uuid)
-        if request.method == "GET" and check_permissions_thread(current_user, ContentAction.VIEW, thread):
+        if not check_permissions_thread(current_user, ContentAction.VIEW, thread):
+            abort(403)
+        if request.method == "GET":
             forum = self.db.get_forum_by_url_name(forum_name)
             thread_vm = self.db.get_thread_viewmodel(thread.db_id)
             comments = self.db.get_comment_viewmodels_in_thread(thread.db_id)
@@ -34,7 +36,7 @@ class ThreadView(View):
                     comment_content = request.form.get("comment_content")
                     self.db.create_comment(comment_content, current_user.db_id, thread.db_id, False)
                     return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
-                if request.form.get("delete_thread") == "Delete Thread" and check_permissions_comment(current_user, ContentAction.DELETE, thread):
+                if request.form.get("delete_thread") == "Delete Thread" and check_permissions_thread(current_user, ContentAction.DELETE, thread):
                     self.db.remove_thread(thread.uuid)
                     return redirect(url_for("forum.forum_view", forum_name=forum_name))
             else:

@@ -14,9 +14,16 @@ class ThreadEditView(View):
     def dispatch_request(self, forum_name, thread_uuid):
         forum = self.db.get_forum_by_url_name(forum_name)
         thread = self.db.get_thread_by_uuid(thread_uuid)
-        if request.method == "GET" and check_permissions_thread(current_user, ContentAction.EDIT, thread=thread):
-            return render_template(self.template, forum=forum, thread=thread, thread_url=url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
-        if request.method == "POST" and check_permissions_thread(current_user, ContentAction.EDIT, thread=thread):
+        if not check_permissions_thread(current_user, ContentAction.EDIT, thread=thread):
+            abort(403)
+        if request.method == "GET":
+            return render_template(
+                self.template,
+                forum=forum,
+                thread=thread,
+                thread_url=url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid)
+            )
+        if request.method == "POST":
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
             self.db.update_thread(thread.db_id, title, content)

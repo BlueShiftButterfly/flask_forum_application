@@ -5,15 +5,17 @@ from application.db import DatabaseBridge
 from application.permissions import check_permissions_forum, check_permissions_thread, ContentAction
 
 class ForumView(View):
-    methods = ["GET", "POST"]
+    methods = ["GET"]
     def __init__(self, template: str, db: DatabaseBridge) -> None:
         self.template = template
         self.db = db
 
     def dispatch_request(self, forum_name):
+        forum = self.db.get_forum_by_url_name(forum_name)
+        if not check_permissions_forum(current_user, ContentAction.VIEW, forum):
+            abort(403)
         if request.method == "GET":
-            forum = self.db.get_forum_by_url_name(forum_name)
-            if forum and check_permissions_forum(current_user, ContentAction.VIEW, forum):
+            if forum:
                 threads = self.db.get_thread_viewmodels_in_forum(forum.db_id)
                 links = {
                     "edit": url_for("forum.forum_edit_view", forum_name=forum.url_name),

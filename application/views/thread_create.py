@@ -12,10 +12,12 @@ class ThreadCreateView(View):
 
     @login_required
     def dispatch_request(self, forum_name):
+        if not check_permissions_thread(current_user, ContentAction.CREATE):
+            abort(403)
         forum = self.db.get_forum_by_url_name(forum_name)
-        if request.method == "GET" and check_permissions_thread(current_user, ContentAction.CREATE):
+        if request.method == "GET":
             return render_template(self.template, forum_name=forum.display_name, forum_url=f"/forum/{forum_name}")
-        if request.method == "POST" and check_permissions_thread(current_user, ContentAction.CREATE):
+        if request.method == "POST":
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
             new_thread = self.db.create_thread(title, content, current_user.db_id, forum.db_id)
