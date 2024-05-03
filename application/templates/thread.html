@@ -35,6 +35,7 @@
         <li>
           <p>{{ comment.content }}</p>
           <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
+          <a href="{{ comment.link }}">Comment Link</a>
         </li>
     {% endfor %}
   </ul>

@@ -1,7 +1,7 @@
 from flask.views import View
-from flask import render_template, request, abort, url_for
+from flask import render_template, request, abort
 from application.db import DatabaseBridge
-from application.timestamp import get_date_from_timestamp
+from application.viewmodels.converter import comment_dbmodel_to_viewmodel
 
 class CommentView(View):
     methods = ["GET", "POST"]
@@ -11,6 +11,6 @@ class CommentView(View):
 
     def dispatch_request(self, forum_name, thread_uuid, comment_uuid):
         if request.method == "GET":
-            comment = self.db.get_comment_by_uuid(comment_uuid)
+            comment = comment_dbmodel_to_viewmodel(self.db.get_comment_by_uuid(comment_uuid))
             return render_template(self.template, comment=comment)
         abort(404)

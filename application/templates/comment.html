@@ -3,7 +3,7 @@
 
 {% block content %}
     <div>
-        <p>{{comment.content}}</p>
-        <p>By {{comment.poster.username}}</p>
+        <p>{{ comment.content }}</p>
+          <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
     </div>
 {% endblock %}
