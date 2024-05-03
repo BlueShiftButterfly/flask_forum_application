@@ -319,7 +319,7 @@ class DatabaseBridge:
         return Thread(result[0], result[1], result[2], result[3], self.get_user_by_id(result[4]), self.get_forum_by_id(result[5]), result[6], result[7])
 
     def get_thread_by_id(self, thread_id: int):
-        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE thread_id=:thread_id"
+        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE id=:thread_id"
         sql_args = {
             "thread_id": thread_id
         }
@@ -414,6 +414,16 @@ class DatabaseBridge:
         sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE id=:id"
         sql_args = {
             "id": db_id
+        }
+        result = self.__db.session.execute(text(sql), sql_args).fetchone()
+        if result is None:
+            return None
+        return Comment(result[0], result[1], result[2], self.get_user_by_id(result[3]), self.get_thread_by_id(result[4]), result[5], result[6], result[7], result[8])
+
+    def get_comment_by_uuid(self, uuid: str):
+        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE uuid=:uuid"
+        sql_args = {
+            "uuid": uuid
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()
         if result is None:

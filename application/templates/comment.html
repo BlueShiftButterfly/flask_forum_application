@@ -1,0 +1,9 @@
+{% extends "base_layout.html" %}
+{% block title %}Comment{% endblock %}
+
+{% block content %}
+    <div>
+        <p>{{comment.content}}</p>
+        <p>By {{comment.poster.username}}</p>
+    </div>
+{% endblock %}

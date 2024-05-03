@@ -9,5 +9,8 @@ class CommentView(View):
         self.template = template
         self.db = db
 
-    def dispatch_request(self):
+    def dispatch_request(self, forum_name, thread_uuid, comment_uuid):
+        if request.method == "GET":
+            comment = self.db.get_comment_by_uuid(comment_uuid)
+            return render_template(self.template, comment=comment)
         abort(404)

@@ -9,6 +9,7 @@ from application.blueprints.account import AccountBlueprint
 from application.blueprints.index import IndexBlueprint
 from application.blueprints.forum import ForumBlueprint
 from application.blueprints.thread import ThreadBlueprint
+from application.blueprints.comment import CommentBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
@@ -39,11 +40,13 @@ def create_app():
     ab = AccountBlueprint(auth)
     fb = ForumBlueprint(db)
     tb = ThreadBlueprint(db)
+    cb = CommentBlueprint(db)
 
     app.register_blueprint(ib.blueprint)
     app.register_blueprint(ab.blueprint)
     app.register_blueprint(fb.blueprint)
     app.register_blueprint(tb.blueprint)
+    app.register_blueprint(cb.blueprint)
 
     login_manager.user_loader(db.get_user_by_uuid)
     login_manager.login_view = "account.login_view"
