@@ -3,6 +3,7 @@ from flask import render_template, request, abort, url_for
 from flask_login import current_user
 from application.db import DatabaseBridge
 from application.permissions import check_permissions_forum, check_permissions_thread, ContentAction
+from application.viewmodels.converter import thread_dbmodels_to_viewmodels
 
 class ForumView(View):
     methods = ["GET"]
@@ -16,7 +17,7 @@ class ForumView(View):
             abort(403)
         if request.method == "GET":
             if forum:
-                threads = self.db.get_thread_viewmodels_in_forum(forum.db_id)
+                threads = thread_dbmodels_to_viewmodels(self.db.get_threads_in_forum(forum.db_id))
                 links = {
                     "edit": url_for("forum.forum_edit_view", forum_name=forum.url_name),
                     "create_thread": url_for("thread.thread_create_view", forum_name=forum.url_name),
