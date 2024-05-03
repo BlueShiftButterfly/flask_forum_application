@@ -7,5 +7,7 @@ class CommentViewmodel:
     localized_date: str
     last_edited_localized_date: str
     link: str
+    edit_link: str
+    delete_link: str
     is_reply: bool
     reply_content: str

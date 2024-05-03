@@ -35,7 +35,12 @@
         <li>
           <p>{{ comment.content }}</p>
           <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
-          <a href="{{ comment.link }}">Comment Link</a>
+          <a href="{{ comment.link }}">Permalink</a>
+          <a href="{{ comment.edit_link }}">Edit</a>
+          <form action="{{ comment.delete_link }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="submit" value="Delete">
+          </form>
         </li>
     {% endfor %}
   </ul>

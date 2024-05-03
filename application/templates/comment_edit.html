@@ -1,0 +1,15 @@
+{% extends "base_layout.html" %}
+{% block title %}Edit Comment{% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{{ thread_url }}">Back to Thread</a>
+        <h2>Edit Comment</h2>
+        <form action="" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <textarea name="comment_content" rows="8" cols="64">{{comment.content}}</textarea>
+            <p></p>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+{% endblock %}

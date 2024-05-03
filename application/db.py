@@ -418,3 +418,14 @@ class DatabaseBridge:
         }
         result = self.__db.session.execute(text(sql), sql_args).fetchone()[0]
         return result
+
+    def update_comment(self, comment_id, content):
+        edit_timestamp = get_utc_timestamp()
+        sql = "UPDATE comments SET content=:content, last_edited_at=:last_edited_at WHERE id=:id"
+        sql_args = {
+            "id": comment_id,
+            "content": content,
+            "last_edited_at": edit_timestamp
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()

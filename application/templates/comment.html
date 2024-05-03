@@ -3,7 +3,15 @@
 
 {% block content %}
     <div>
+        <a href="{{ forum_link }}">{{ forum_name }}</a>
+        <p></p>
+        <a href="{{ thread.link }}">Back to Thread</a>
         <p>{{ comment.content }}</p>
-          <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
+        <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
+        <a href="{{ comment.edit_link }}">Edit</a>
+        <form action="{{ comment.delete_link }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="submit" value="Delete">
+        </form>
     </div>
 {% endblock %}

@@ -8,3 +8,5 @@ class ThreadViewmodel:
     localized_post_date: str
     last_edited_localized_date: str
     link: str
+    edit_link: str
+    delete_link: str

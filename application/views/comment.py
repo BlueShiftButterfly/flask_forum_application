@@ -1,7 +1,9 @@
 from flask.views import View
-from flask import render_template, request, abort
+from flask import render_template, request, abort, redirect, url_for
+from flask_login import current_user
 from application.db import DatabaseBridge
-from application.viewmodels.converter import comment_dbmodel_to_viewmodel
+from application.viewmodels.converter import comment_dbmodel_to_viewmodel, thread_dbmodel_to_viewmodel
+from application.permissions import check_permissions_comment, ContentAction
 
 class CommentView(View):
     methods = ["GET", "POST"]
@@ -10,7 +12,14 @@ class CommentView(View):
         self.db = db
 
     def dispatch_request(self, forum_name, thread_uuid, comment_uuid):
+        comment = self.db.get_comment_by_uuid(comment_uuid)
+        comment_vm = comment_dbmodel_to_viewmodel(comment)
+        thread_vm = thread_dbmodel_to_viewmodel(comment.thread)
+        forum = self.db.get_forum_by_url_name(forum_name)
         if request.method == "GET":
-            comment = comment_dbmodel_to_viewmodel(self.db.get_comment_by_uuid(comment_uuid))
-            return render_template(self.template, comment=comment)
+            if not check_permissions_comment(current_user, ContentAction.VIEW, comment):
+               abort(403)
+            return render_template(self.template, comment=comment_vm, thread=thread_vm, forum_link=url_for("forum.forum_view", forum_name=forum_name), forum_name=forum.display_name)
+        if request.method == "POST":
+            return redirect(thread_vm.link)
         abort(404)

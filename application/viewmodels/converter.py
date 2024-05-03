@@ -20,6 +20,18 @@ def comment_dbmodel_to_viewmodel(comment: Comment) -> CommentViewmodel:
             thread_uuid=comment.thread.uuid,
             comment_uuid=comment.uuid
         ),
+        url_for(
+            "comment.comment_edit_view",
+            forum_name=comment.thread.forum.url_name,
+            thread_uuid=comment.thread.uuid,
+            comment_uuid=comment.uuid
+        ),
+        url_for(
+            "comment.comment_delete_view",
+            forum_name=comment.thread.forum.url_name,
+            thread_uuid=comment.thread.uuid,
+            comment_uuid=comment.uuid
+        ),
         comment.is_reply,
         ""
     )
@@ -38,7 +50,9 @@ def thread_dbmodel_to_viewmodel(thread: Thread) -> ThreadViewmodel:
         thread.poster.username,
         get_date_string(thread.created_at),
         last_edit,
-        url_for("thread.thread_view", forum_name=thread.forum.url_name, thread_uuid=thread.uuid)
+        url_for("thread.thread_view", forum_name=thread.forum.url_name, thread_uuid=thread.uuid),
+        url_for("thread.thread_edit_view", forum_name=thread.forum.url_name, thread_uuid=thread.uuid),
+        url_for("thread.thread_delete_view", forum_name=thread.forum.url_name, thread_uuid=thread.uuid)
     )
     return tvm
 
