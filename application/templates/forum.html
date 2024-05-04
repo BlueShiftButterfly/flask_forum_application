@@ -3,18 +3,18 @@
 
 {% block content %}
   <h3>{{forum.display_name}}</h3>
-  <p>{{forum.forum_description}}</p>
-  {% if permissions["edit"] == True %}
-  <a href="{{ links['edit'] }}">Edit Forum Settings</a>
+  <p>{{forum.description}}</p>
+  {% if forum.viewer_can_edit == True %}
+  <a href="{{ forum.edit_link }}">Edit Forum Settings</a>
   {% endif %}
-  {% if permissions["delete"] == True %}
-  <form action="{{ links['delete'] }}" method="POST">
+  {% if forum.viewer_can_delete == True %}
+  <form action="{{ forum.delete_link }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Delete Forum">
   </form>
   {% endif %}
-  {% if permissions["create_thread"] == True %}
-  <a href="{{ links['create_thread'] }}">Create Thread</a>
+  {% if forum.viewer_can_create_thread == True %}
+  <a href="{{ forum.thread_create_link }}">Create Thread</a>
   {% endif %}
   <p>Threads:</p>
   <ul>

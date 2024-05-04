@@ -10,3 +10,8 @@ class ThreadViewmodel:
     link: str
     edit_link: str
     delete_link: str
+    forum_link: str
+    forum_name: str
+    viewer_can_edit: bool
+    viewer_can_delete: bool
+    viewer_can_comment: bool

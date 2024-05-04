@@ -15,5 +15,6 @@ class ThreadDeleteView(View):
         if not check_permissions_thread(current_user, ContentAction.DELETE, thread=thread):
             abort(403)
         if request.method == "POST":
-            return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
+            self.db.remove_thread(thread_uuid)
+            return redirect(url_for("forum.forum_view", forum_name=forum_name))
         abort(404)

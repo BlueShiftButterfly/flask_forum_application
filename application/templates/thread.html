@@ -2,7 +2,7 @@
 {% block title %}{{thread.title}} - {{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <a href="{{ links['forum'] }}">{{ forum.display_name }}</a>
+  <a href="{{ thread.forum_link }}">{{ forum.display_name }}</a>
   <h2>{{thread.title}}</h2>
   <p>{{thread.content}}</p>
   {% if thread.last_edited_localized_date == None %}
@@ -10,16 +10,16 @@
   {% else %}
   <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }} (EDITED at {{ thread.last_edited_localized_date }})</p>
   {% endif %}
-  {% if permissions["delete"] == True %}
-  <form action="" method="POST">
+  {% if thread.viewer_can_delete == True %}
+  <form action="{{ thread.delete_link }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <input type="submit" value="Delete Thread" name="delete_thread">
   </form>
   {% endif %}
-  {% if permissions["edit"] == True %}
-  <a href="{{ links['edit'] }}">Edit Thread</a>
+  {% if thread.viewer_can_edit == True %}
+  <a href="{{ thread.edit_link }}">Edit Thread</a>
   {% endif %}
-  {% if permissions["create_comment"] == True %}
+  {% if thread.viewer_can_comment == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h3>Write a Comment</h3>

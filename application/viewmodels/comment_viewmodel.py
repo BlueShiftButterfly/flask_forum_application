@@ -11,3 +11,5 @@ class CommentViewmodel:
     delete_link: str
     is_reply: bool
     reply_content: str
+    viewer_can_edit: bool
+    viewer_can_delete: bool

@@ -25,7 +25,7 @@ ADMINISTRATOR = Role(
     {
         ContentAction.VIEW: PermissionLevel.FULL,
         ContentAction.CREATE: PermissionLevel.FULL,
-        ContentAction.EDIT: PermissionLevel.OWNED_ONLY,
+        ContentAction.EDIT: PermissionLevel.FULL,
         ContentAction.DELETE: PermissionLevel.FULL
     },
     {
