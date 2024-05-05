@@ -1,5 +1,6 @@
 import os
 import string
+import click
 from flask import Flask
 from flask.cli import AppGroup
 from flask_login import LoginManager
@@ -13,7 +14,7 @@ from application.blueprints.comment import CommentBlueprint
 from application.authentication import Authenticator
 from application.db import DatabaseBridge
 from application.authentication import UsernameValidator, PasswordValidator
-from application.example_content import create_example_content
+from application.example_content import create_example_content, clear_database, set_admin, remove_admin
 
 UN_CHARACTERS = set(string.ascii_letters + string.digits)
 PW_CHARACTERS = set(string.ascii_letters + string.digits + string.punctuation)
@@ -52,12 +53,28 @@ def create_app():
     login_manager.login_view = "account.login_view"
     login_manager.anonymous_user = auth.get_anonymous_user
     
-    user_cli = AppGroup('demo')
+    user_cli = AppGroup('user')
+    database_cli = AppGroup('database')
 
-    @user_cli.command('create')
+    @user_cli.command('create-demo')
     def create_demo():
         create_example_content(db)
 
+    @user_cli.command('give-admin')
+    @click.argument("username")
+    def give_admin(username):
+        set_admin(username, db)
+
+    @user_cli.command('remove-admin')
+    @click.argument("username")
+    def revoke_admin(username):
+        remove_admin(username, db)
+
+    @database_cli.command('wipe')
+    def wipe_content():
+        clear_database(db)
+
     app.cli.add_command(user_cli)
+    app.cli.add_command(database_cli)
 
     return app

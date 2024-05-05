@@ -107,6 +107,15 @@ class DatabaseBridge:
         self.__db.session.execute(text(sql), sql_args)
         self.__db.session.commit()
 
+    def set_user_role(self, id: int, role_id: int):
+        sql = "UPDATE users SET role_id=:role_id WHERE id=:id"
+        sql_args = {
+            "id": id,
+            "role_id": role_id
+        }
+        self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
     def set_user_forum_access(self, user_id: int, forum_id: int, can_access: bool):
         if self.check_if_user_access_exists(user_id, forum_id):
             self.update_user_forum_access(user_id, forum_id, can_access)
@@ -428,4 +437,9 @@ class DatabaseBridge:
             "last_edited_at": edit_timestamp
         }
         self.__db.session.execute(text(sql), sql_args)
+        self.__db.session.commit()
+
+    def wipe_database(self):
+        sql = "TRUNCATE comments, threads, forums, private_forum_access, users CASCADE"
+        self.__db.session.execute(text(sql))
         self.__db.session.commit()
