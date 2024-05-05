@@ -21,9 +21,13 @@ def create_example_content(db: DatabaseBridge):
     pyforum = db.create_forum("python", "Python", "Forum for Python related discussion", example_user.db_id, False)
     qaforum = db.create_forum("questions", "Questions", "Forum for asking questions", example_user.db_id, False)
     pt = db.create_thread("Is python the best language?","It is a great language in my opinion. What are your thoughts?", example_user.db_id, pyforum.db_id)
+    pt2 = db.create_thread("How to use print?","How do I print text?", example_user.db_id, pyforum.db_id)
     db.create_comment("I don't like dynamically typed languages.", cpp_fan_user.db_id, pt.db_id, False)
     db.create_comment("I really like python.", python_fan_user.db_id, pt.db_id, False)
-    db.create_thread("How to exit vim","help", example_user.db_id, qaforum.db_id)
+    db.create_comment("Just do print(\"text\")", python_fan_user.db_id, pt2.db_id, False)
+    qt = db.create_thread("Which code editors are good","Which one should I use?", example_user.db_id, qaforum.db_id)
+    db.create_comment("I like using vim. Very efficient and powerful.", cpp_fan_user.db_id, qt.db_id, False)
+    db.create_comment("VSCode is pretty easy to use and setup.", python_fan_user.db_id, qt.db_id, False)
     print("Created demo content succesfully")
 
 def clear_database(db: DatabaseBridge):
