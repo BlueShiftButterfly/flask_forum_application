@@ -8,10 +8,14 @@
         <a href="{{ thread.link }}">Back to Thread</a>
         <p>{{ comment.content }}</p>
         <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
+        {% if comment.viewer_can_edit == True %}
         <a href="{{ comment.edit_link }}">Edit</a>
+        {% endif %}
+        {% if comment.viewer_can_delete == True %}
         <form action="{{ comment.delete_link }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="submit" value="Delete">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="submit" value="Delete">
         </form>
+        {% endif %}
     </div>
 {% endblock %}
