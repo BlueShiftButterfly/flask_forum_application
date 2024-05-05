@@ -20,6 +20,8 @@ class ThreadCreateView(View):
         if request.method == "POST":
             title = request.form.get("thread_title")
             content = request.form.get("thread_content")
+            if title == "" or content == "":
+                return redirect(url_for("thread.thread_create_view", forum_name=forum_name))
             new_thread = self.db.create_thread(title, content, current_user.db_id, forum.db_id)
             return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=new_thread.uuid))
         abort(404)

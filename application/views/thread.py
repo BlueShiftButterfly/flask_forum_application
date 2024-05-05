@@ -23,6 +23,8 @@ class ThreadView(View):
         if request.method == "POST":
             if request.form.get("comment_submit") == "Submit" and check_permissions_comment(current_user, ContentAction.CREATE):
                 comment_content = request.form.get("comment_content")
+                if comment_content == "":
+                    return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
                 self.db.create_comment(comment_content, current_user.db_id, thread.db_id, False)
                 return redirect(url_for("thread.thread_view", forum_name=forum_name, thread_uuid=thread_uuid))
             else:
