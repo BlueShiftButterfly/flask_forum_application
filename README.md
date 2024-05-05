@@ -82,6 +82,7 @@ tai
 ~~~
 bash create_demo.sh
 ~~~
+Tämä demodatan luomien käyttäjien tileille ei voi kirjautua. Ne ovat vain esimerkkinä. Käyttäjäominaisuuksien testaamiseen kannattaa luoda uusi tili.
 
 Tietokannan datan voi nollata seuraavalla komennolla (taulut kuitenkin pysyvät):
 
