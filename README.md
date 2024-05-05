@@ -45,20 +45,6 @@ Kun tietokanta on lokaalisti pyörimässä, scheman voi määrittää seuraavast
 psql < schema.sql
 ~~~
 
-3.5: Demodatan lisääminen
-
-Halutessaan sovellukseen voi lisätä demodataa seuraavalla komennolla:
-
-~~~
-poetry run flask --app application/main.py demo create
-~~~
-
-tai
-
-~~~
-bash create_demo.sh
-~~~
-
 4: Sovelluksen käynnistäminen
 
 Debug versiona:
@@ -83,6 +69,36 @@ tai
 
 ~~~
 bash launch.sh
+~~~
+
+### Sovelluksen demokomennot
+
+Halutessaan sovellukseen voi lisätä demodataa seuraavalla komennolla:
+
+~~~
+poetry run flask --app application/main.py demo create
+~~~
+tai
+~~~
+bash create_demo.sh
+~~~
+
+Tietokannan datan voi nollata seuraavalla komennolla (taulut kuitenkin pysyvät):
+
+~~~
+poetry run flask --app application/main.py database wipe
+~~~
+
+Tietylle käyttäjälle voi antaa ylläpitäjäoikeudet seuraavalla komennolla:
+
+~~~
+poetry run flask --app application/main.py user give-admin <käyttäjän-nimi>
+~~~
+
+Sen voi myös poistaa seuraavasti:
+
+~~~
+poetry run flask --app application/main.py user remove-admin <käyttäjän-nimi>
 ~~~
 
 ## Lopullinen palautus
