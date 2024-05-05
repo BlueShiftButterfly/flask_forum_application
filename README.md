@@ -1,14 +1,18 @@
 # Flask Keskustelusovellus
 
-[Ohje](#ohje)
+[Käyttöohje](#käyttöohje)
 
-[Välipalautus 2 tilanne](#välipalautus-2-tilanne)
+[Lopullinen palautus](#lopullinen-palautus)
 
 [Välipalautus 3 tilanne](#välipalautus-3-tilanne)
 
+[Välipalautus 2 tilanne](#välipalautus-2-tilanne)
+
 [Valittu Aihe](#valittu-aihe)
 
-## Ohje
+## Käyttöhje
+
+### Sovelluksen lokaalinen käynnistys
 
 1: .env tiedoston määrittely
 
@@ -81,13 +85,17 @@ tai
 bash launch.sh
 ~~~
 
-## Välipalautus 2 tilanne
+## Lopullinen palautus
 
 Sovelluksessa käyttäjä voi luoda tunnukset ja kirjautua sisään/ulos.
 
 Käyttäjä voi lukea eri keskustelualueilla viestejä.
 
-Sovelluksessa ei voi vielä luoda keskustelualueita tai viestejä.
+Käyttäjä voi luoda keskusteluketjuja, kommentoida niihin sekä poistaa tai muokata omia viestejään.
+
+Ylläpitäjä voi luoda keskustelualueen, muokata sen ominaisuuksia tai poistaa sen kokonaan.
+
+Keskustelualueen voi tehdä yksityiseksi, jolloin vain tietyt käyttäjät pääsevät lukemaan ja kommentoimaan sinne.
 
 ## Välipalautus 3 tilanne
 
@@ -97,7 +105,15 @@ Käyttäjä voi lukea eri keskustelualueilla viestejä.
 
 Käyttäjä voi luoda keskusteluketjuja ja vastata niihin.
 
-Ylläpitäjä voi luoda keskustelualueen /create_forum osoitteessa
+Ylläpitäjä voi luoda keskustelualueen /create_forum osoitteessa.
+
+## Välipalautus 2 tilanne
+
+Sovelluksessa käyttäjä voi luoda tunnukset ja kirjautua sisään/ulos.
+
+Käyttäjä voi lukea eri keskustelualueilla viestejä.
+
+Sovelluksessa ei voi vielä luoda keskustelualueita tai viestejä.
 
 ## Valittu aihe:
 
