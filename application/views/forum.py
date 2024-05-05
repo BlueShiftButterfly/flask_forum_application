@@ -2,7 +2,7 @@ from flask.views import View
 from flask import render_template, request, abort, url_for
 from flask_login import current_user
 from application.db import DatabaseBridge
-from application.permissions import check_permissions_forum, check_permissions_thread, ContentAction
+from application.permissions import check_permissions_forum, ContentAction
 from application.viewmodels.converter import threads_to_viewmodels, forum_to_viewmodel
 
 class ForumView(View):

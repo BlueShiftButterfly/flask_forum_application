@@ -2,14 +2,12 @@
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
-    <div>
-        <form method="POST">
+    <div class="login_box">
+        <form method="POST" class="login_form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <label for="username_input">Username</label>
-            <input type="text" name="username" id="username_input"></input>
-            <label for="password_input">Password</label>
-            <input type="password" name="password" id="password_input"></input>
-            <input type="submit" value="Sign up"></input>
+            <input placeholder="Username" class="login_box_item" type="text" name="username" id="username_input"></input>
+            <input placeholder="Password" class="login_box_item" type="password" name="password" id="password_input"></input>
+            <input class="big_button_inverted" type="submit" value="Sign Up"></input>
         </form>
     </div>
 {% endblock %}

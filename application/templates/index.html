@@ -2,14 +2,21 @@
 {% block title %}Frontpage{% endblock %}
 
 {% block content %}
-  {% if can_create_forum == True %}
-  <a href="{{ forum_create_link }}">Create Forum</a>
-  {% endif %}
-  <p>List of forums:</p>
-  <ul>
-    {% for item in forums %}
-        <li><a href="{{ item.url }}">{{ item.display_name }}</a></li>
+
+  <div class="forum_banner">
+    <h2>
+      Forums
+      {% if can_create_forum == True %}
+      <a class="basic_button_right_float" href="{{ forum_create_link }}">Create Forum</a>
+      {% endif %}
+    </h2>
+  </div>
+  <ul class="forum_list">
+    {% for forum in forums %}
+        <li class="forum_list_item">
+          <a class="forum_list_link" href="{{ forum.link }}">{{ forum.display_name }}</a>
+          <p class="forum_list_description">{{ forum.description }}</p>
+        </li>
     {% endfor %}
   </ul>
-  
 {% endblock %}

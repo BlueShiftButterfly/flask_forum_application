@@ -2,17 +2,25 @@
 {% block title %}Create Thread - {{forum_name}}{% endblock %}
 
 {% block content %}
-  <p>Forum: {{forum_name}}</p>
-  <h2>Create Thread</h2>
-  <form action="" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <h3>Title</h3>
-    <input type="text" name="thread_title" size="56">
-    <h3>Content</h3>
-    <textarea name="thread_content" rows="8" cols="64"></textarea>
-    <p></p>
-    <input type="submit" value="Submit">
-    <a href="{{forum_url}}">Cancel</a>
-  </form>
-  
+  <div class="forum_banner">
+    <a class="content_header" href="{{forum.link}}">
+      {{forum.display_name}}   
+    </a>
+    <p class="content_header_description">{{forum.description}}</p>
+  </div>
+  <div class="thread_container">
+    <div class="thread_list_item">
+      <h2>Create Thread</h2>
+      <form action="" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <h3>Title</h3>
+        <input type="text" name="thread_title" size="56">
+        <h3>Content</h3>
+        <textarea name="thread_content" rows="8" cols="64"></textarea>
+        <p></p>
+        <input class="basic_button_inverted" type="submit" value="Submit">
+        <a class="basic_button" href="{{ forum.link }}">Cancel</a>
+      </form>
+    </div>
+  </div>
 {% endblock %}

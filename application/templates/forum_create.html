@@ -2,18 +2,26 @@
 {% block title %}Create Forum{% endblock %}
 
 {% block content %}
-  <h2>Create Forum</h2>
+<div class="forum_content">
+  <h2>Edit Forum</h2>
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <h3>Title</h3>
+    <h3>Display Name</h3>
     <input type="text" name="forum_name" size="56">
-    <h3>URL name</h3>
+    <h3>URL</h3>
     <input type="text" name="forum_url_name" size="56">
     <h3>Description</h3>
     <textarea name="forum_description" rows="8" cols="64"></textarea>
     <p></p>
-    <input type="submit" value="Submit">
-    <a href="/">Cancel</a>
-  </form>
+    <h3>User Access</h3>
+    <input type="checkbox" id="is_invite_only" name="is_invite_only"/>
+    <label for="is_invite_only">Is Invite Only</label>
+    <p></p>
+    <textarea name="forum_invite_list" rows="8" cols="64"></textarea>
+    <p></p>
+    <input class="basic_button_inverted" type="submit" value="Submit">
+    <a class="basic_button" href="/">Cancel</a>
+  </form>  
+</div>
   
 {% endblock %}

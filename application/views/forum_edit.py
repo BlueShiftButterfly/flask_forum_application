@@ -3,6 +3,7 @@ from flask import render_template, request, abort, redirect, url_for
 from flask_login import current_user, login_required
 from application.db import DatabaseBridge
 from application.permissions import check_permissions_forum, ContentAction
+from application.viewmodels.converter import forum_to_viewmodel
 
 class ForumEditView(View):
     methods = ["GET", "POST"]
@@ -17,7 +18,8 @@ class ForumEditView(View):
             abort(403)
         if request.method == "GET":
             invite_list = "\n".join(list(forum.invited_users))
-            return render_template(self.template, forum=forum, cancel_link=url_for("forum.forum_view", forum_name=forum_name), invite_list=invite_list)
+            forum_vm = forum_to_viewmodel(forum)
+            return render_template(self.template, forum=forum_vm, invite_list=invite_list)
         if request.method == "POST":
             display_name = request.form.get("forum_name")
             url_name = request.form.get("forum_url_name")

@@ -3,7 +3,7 @@ from flask import render_template, request, abort, url_for, redirect
 from flask_login import current_user
 from application.db import DatabaseBridge
 from application.permissions import check_permissions_thread, check_permissions_comment, ContentAction
-from application.viewmodels.converter import comments_to_viewmodels, thread_to_viewmodel
+from application.viewmodels.converter import comments_to_viewmodels, thread_to_viewmodel, forum_to_viewmodel
 
 class ThreadView(View):
     methods = ["GET", "POST"]
@@ -16,10 +16,10 @@ class ThreadView(View):
         if not check_permissions_thread(current_user, ContentAction.VIEW, thread):
             abort(403)
         if request.method == "GET":
-            forum = self.db.get_forum_by_url_name(forum_name)
+            forum_vm = forum_to_viewmodel(self.db.get_forum_by_url_name(forum_name))
             thread_vm = thread_to_viewmodel(thread)
             comments = comments_to_viewmodels(self.db.get_comments_in_thread(thread.db_id))
-            return render_template(self.template, forum=forum, thread=thread_vm, comments=comments)
+            return render_template(self.template, forum=forum_vm, thread=thread_vm, comments=comments)
         if request.method == "POST":
             if request.form.get("comment_submit") == "Submit" and check_permissions_comment(current_user, ContentAction.CREATE):
                 comment_content = request.form.get("comment_content")

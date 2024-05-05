@@ -3,6 +3,7 @@ from flask import render_template, url_for, request, abort
 from flask_login import current_user
 from application.db import DatabaseBridge
 from application.permissions import check_permissions_forum, ContentAction
+from application.viewmodels.converter import forums_to_viewmodels
 
 class IndexView(View):
     methods = ["GET"]
@@ -21,6 +22,7 @@ class IndexView(View):
                     (forum.is_invite_only and current_user.username in forum.invited_users)
                 )
             ]
+            viewable_forums = forums_to_viewmodels(viewable_forums)
             forum_permission = check_permissions_forum(current_user, ContentAction.CREATE)
             return render_template(
                 self.template,

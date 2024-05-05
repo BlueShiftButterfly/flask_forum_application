@@ -2,50 +2,66 @@
 {% block title %}{{thread.title}} - {{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <a href="{{ thread.forum_link }}">{{ forum.display_name }}</a>
-  <h2>{{thread.title}}</h2>
-  <p>{{thread.content}}</p>
-  {% if thread.last_edited_localized_date == None %}
-  <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }}</p>
-  {% else %}
-  <p>Posted by {{thread.poster_username}} at {{ thread.localized_post_date }} (EDITED at {{ thread.last_edited_localized_date }})</p>
-  {% endif %}
-  {% if thread.viewer_can_delete == True %}
+<div class="forum_banner">
+  <a class="content_header" href="{{forum.link}}">
+    {{forum.display_name}}   
+  </a>
+  <p class="content_header_description">{{forum.description}}</p>
+</div>
+<div class="thread_container">
+  <div class="thread_list_item">
+    <h2 class="thread_list_link">{{thread.title}}</h2>
+    <p class="thread_list_description">{{thread.content}}</p>
+    <p class="thread_list_item_user">{{thread.poster_username}}</p>
+    {% if thread.last_edited_localized_date == None %}
+    <p class="thread_list_item_time">{{ thread.localized_post_date }}</p>
+    {% else %}
+    <p class="thread_list_item_time">{{ thread.localized_post_date }} (EDITED at {{ thread.last_edited_localized_date }})</p>
+    {% endif %}
+  </div>
   <form action="{{ thread.delete_link }}" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <input type="submit" value="Delete Thread" name="delete_thread">
+    {% if thread.viewer_can_edit == True %}
+    <a class="basic_button" href="{{ thread.edit_link }}">Edit Thread</a>
+    {% endif %}
+    {% if thread.viewer_can_delete == True %}
+    <input class="basic_button_inverted" type="submit" value="Delete Thread" name="delete_thread">
+    {% endif %}
   </form>
-  {% endif %}
-  {% if thread.viewer_can_edit == True %}
-  <a href="{{ thread.edit_link }}">Edit Thread</a>
-  {% endif %}
   {% if thread.viewer_can_comment == True %}
   <form action="" method="POST">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
     <h3>Write a Comment</h3>
     <textarea name="comment_content" rows="8" cols="64"></textarea>
     <p></p>
-    <input type="submit" value="Submit" name="comment_submit">
+    <input class="basic_button_inverted" type="submit" value="Submit" name="comment_submit">
   </form>
   {% else %}
   <h3>Log In or Sign Up to Comment</h3>
   {% endif %}
-  <ul>
+  <ul class="comment_list">
     {% for comment in comments %}
-        <li>
-          <p>{{ comment.content }}</p>
-          <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
-          <a href="{{ comment.link }}">Permalink</a>
-          {% if comment.viewer_can_edit == True %}
-          <a href="{{ comment.edit_link }}">Edit</a>
+        <li class="comment_list_item">
+          <p class="comment_list_item_user">{{ comment.poster_username }} </p>
+          {% if comment.last_edited_localized_date == None %}
+          <p class="comment_list_item_time">{{ comment.localized_date }}</p>
+          {% else %}
+          <p class="comment_list_item_time">{{ comment.localized_date }} (EDITED at {{ comment.last_edited_localized_date }})</p>
           {% endif %}
-          {% if comment.viewer_can_delete == True %}
+          <p class="comment_list_description">{{ comment.content }}</p>
           <form action="{{ comment.delete_link }}" method="POST">
+            <a class="basic_button" href="{{ comment.link }}">Permalink</a>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <input type="submit" value="Delete">
+            
+            {% if comment.viewer_can_edit == True %}
+            <a class="basic_button" href="{{ comment.edit_link }}">Edit</a>
+            {% endif %}
+            {% if comment.viewer_can_delete == True %}
+            <input class="basic_button_inverted" type="submit" value="Delete">
+            {% endif %}
           </form>
-          {% endif %}
         </li>
     {% endfor %}
   </ul>
+</div>
 {% endblock %}

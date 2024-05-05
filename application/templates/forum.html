@@ -2,28 +2,39 @@
 {% block title %}{{forum.display_name}}{% endblock %}
 
 {% block content %}
-  <h3>{{forum.display_name}}</h3>
-  <p>{{forum.description}}</p>
-  {% if forum.viewer_can_edit == True %}
-  <a href="{{ forum.edit_link }}">Edit Forum Settings</a>
-  {% endif %}
-  {% if forum.viewer_can_delete == True %}
-  <form action="{{ forum.delete_link }}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <input type="submit" value="Delete Forum">
-  </form>
-  {% endif %}
-  {% if forum.viewer_can_create_thread == True %}
-  <a href="{{ forum.thread_create_link }}">Create Thread</a>
-  {% endif %}
-  <p>Threads:</p>
-  <ul>
-    {% for thread in threads %}
-        <li>
-          <a href="{{ thread.link}}">{{ thread.title }}</a>
-          <p>{{ thread.content }}</p>
-          <p>Posted by {{ thread.poster_username }} at {{ thread.localized_post_date }}</p>
-        </li>
-    {% endfor %}
-  </ul>
+  <div class="forum_banner">
+    <h2>
+      {{forum.display_name}}
+      <form class="form_center_aligned" action="{{ forum.delete_link }}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        {% if forum.viewer_can_delete == True %}
+        <input class="basic_button_right_float_inverted" type="submit" value="Delete Forum">
+        {% endif %}
+        {% if forum.viewer_can_edit == True %}
+        <a class="basic_button_right_float "href="{{ forum.edit_link }}">Edit Forum Settings</a>
+        {% endif %}
+        {% if forum.viewer_can_create_thread == True %}
+        <a class="basic_button_right_float" href="{{ forum.thread_create_link }}">Create Thread</a>
+        {% endif %}
+      </form>
+    </h2>
+    <p>{{forum.description}}</p>
+  </div>
+  <div class="forum_content">
+    <h3>THREADS:</h3>
+    <ul class="thread_list">
+      {% for thread in threads %}
+          <li class="thread_list_item">
+            <a class="thread_list_link" href="{{thread.link}}" >{{thread.title}}</a>
+            <p class="thread_list_description">{{thread.content}}</p>
+            <p class="thread_list_item_user">{{thread.poster_username}}</p>
+            {% if thread.last_edited_localized_date == None %}
+            <p class="thread_list_item_time">{{ thread.localized_post_date }}</p>
+            {% else %}
+            <p class="thread_list_item_time">{{ thread.localized_post_date }} (EDITED at {{ thread.last_edited_localized_date }})</p>
+            {% endif %}      
+          </li>
+      {% endfor %}
+    </ul>
+    </div>
 {% endblock %}

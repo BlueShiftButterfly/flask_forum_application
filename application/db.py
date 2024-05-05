@@ -327,7 +327,7 @@ class DatabaseBridge:
         return Thread(result[0], result[1], result[2], result[3], self.get_user_by_id(result[4]), self.get_forum_by_id(result[5]), result[6], result[7])
 
     def get_threads_in_forum(self, forum_id: int):
-        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE forum_id=:forum_id ORDER BY created_at DESC"
+        sql = "SELECT id, uuid, title, content, poster_id, forum_id, created_at, last_edited_at FROM threads WHERE forum_id=:forum_id ORDER BY created_at"
         sql_args = {
             "forum_id": forum_id
         }
@@ -399,7 +399,7 @@ class DatabaseBridge:
         return Comment(result[0], result[1], result[2], self.get_user_by_id(result[3]), self.get_thread_by_id(result[4]), result[5], result[6], result[7], result[8])
 
     def get_comments_in_thread(self, thread_id: int):
-        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id ORDER BY created_at DESC"
+        sql = "SELECT id, uuid, content, poster_id, thread_id, is_reply, reply_comment_id, created_at, last_edited_at FROM comments WHERE thread_id=:thread_id ORDER BY created_at"
         sql_args = {
             "thread_id": thread_id
         }

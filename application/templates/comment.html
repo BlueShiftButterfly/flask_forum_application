@@ -2,20 +2,34 @@
 {% block title %}Comment{% endblock %}
 
 {% block content %}
-    <div>
-        <a href="{{ forum_link }}">{{ forum_name }}</a>
-        <p></p>
-        <a href="{{ thread.link }}">Back to Thread</a>
-        <p>{{ comment.content }}</p>
-        <p>Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
-        {% if comment.viewer_can_edit == True %}
-        <a href="{{ comment.edit_link }}">Edit</a>
-        {% endif %}
-        {% if comment.viewer_can_delete == True %}
-        <form action="{{ comment.delete_link }}" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-        <input type="submit" value="Delete">
-        </form>
-        {% endif %}
+    <div class="forum_banner">
+        <a class="content_header" href="{{forum.link}}">
+            {{forum.display_name}}   
+        </a>
+        <p class="content_header_description">{{forum.description}}</p>
+    </div>
+    <div class="forum_content">
+        <a class="basic_button" href="{{thread.link}}">Thread</a>
+        <div class="comment_list_item">
+            <p class="comment_list_description">{{ comment.content }}</p>
+            {% if comment.last_edited_localized_date == None %}
+            <p class="comment_list_description">Posted by {{ comment.poster_username }} at {{ comment.localized_date }}</p>
+            {% else %}
+            <p class="comment_list_description">Posted by {{ comment.poster_username }} at {{ comment.localized_date }} (EDITED at {{ comment.last_edited_localized_date }})</p>
+            {% endif %}
+            
+            <form action="{{ comment.delete_link }}" method="POST">
+                <a class="basic_button" href="{{ comment.link }}">Permalink</a>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                {% if comment.viewer_can_edit == True %}
+                <a class="basic_button" href="{{ comment.edit_link }}">Edit</a>
+                {% endif %}
+                {% if comment.viewer_can_delete == True %}
+                <input class="basic_button_inverted" type="submit" value="Delete">
+                {% endif %}
+            </form>
+            
+        </div>
     </div>
 {% endblock %}

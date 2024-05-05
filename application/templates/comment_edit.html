@@ -2,14 +2,23 @@
 {% block title %}Edit Comment{% endblock %}
 
 {% block content %}
-    <div>
-        <a href="{{ thread_url }}">Back to Thread</a>
-        <h2>Edit Comment</h2>
-        <form action="" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <textarea name="comment_content" rows="8" cols="64">{{comment.content}}</textarea>
-            <p></p>
-            <input type="submit" value="Submit">
-        </form>
+    <div class="forum_banner">
+        <a class="content_header" href="{{forum.link}}">
+            {{forum.display_name}}   
+        </a>
+        <p class="content_header_description">{{forum.description}}</p>
+    </div>
+    <div class="forum_content">
+        <a class="basic_button" href="{{thread.link}}">Thread</a>
+        <div class="comment_list_item">
+            <h2>Edit Comment</h2>
+            <form action="" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <textarea name="comment_content" rows="8" cols="64">{{comment.content}}</textarea>
+                <p></p>
+                <input class="basic_button_inverted" type="submit" value="Submit">
+                <a class="basic_button" href="{{comment.link}}">Cancel</a>
+            </form>
+        </div>
     </div>
 {% endblock %}
