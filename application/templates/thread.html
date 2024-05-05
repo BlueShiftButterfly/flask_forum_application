@@ -49,7 +49,7 @@
           <p class="comment_list_item_time">{{ comment.localized_date }} (EDITED at {{ comment.last_edited_localized_date }})</p>
           {% endif %}
           <p class="comment_list_description">{{ comment.content }}</p>
-          <form action="{{ comment.delete_link }}" method="POST">
+          <form class="form_special_button" action="{{ comment.delete_link }}" method="POST">
             <a class="basic_button" href="{{ comment.link }}">Permalink</a>
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             

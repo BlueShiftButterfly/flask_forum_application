@@ -27,9 +27,9 @@ body {
 .top_navbar {
     width: 100%;
     background-color: var(--background-color);
-    border-bottom: 1px;
+    border-bottom: 2px;
     border-bottom-style: solid;
-    border-bottom-color: var(--secondary-color);
+    border-bottom-color: var(--accent-color);
 }
 
 .navigation {
@@ -318,10 +318,15 @@ body {
     font-size: medium;
 }
 
-.form_special_button {
+.form_special_button_right {
     text-align: center;
     margin: 0;
     float: right;
+}
+
+.form_special_button {
+    margin-left: 8px;
+    margin-bottom: 16px;
 }
 
 .login_box {
