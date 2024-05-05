@@ -1,1 +1,1 @@
-poetry run flask --app application/main.py demo create
+poetry run flask --app application/main.py user create-demo
